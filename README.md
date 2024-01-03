@@ -20,13 +20,4 @@ An app dedicated to the study and implementation of modern software development 
 
 ## Getting Started
 
-[To configure and run this project, simply have XCodeGen and CocoaPods installed and then run the "make generate" command in the root of the project. You will also need to download the Firebase configuration files (only with permission granted).]
-
-## Contributing
-
-[Guidelines for contributing to the project]
-
-## License
-
-[License information]
-
+To configure and run this project, simply have XCodeGen and CocoaPods installed and then run the "make generate" command in the root of the project. You will also need to download the Firebase configuration files (only with permission granted).
