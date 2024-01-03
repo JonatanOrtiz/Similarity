@@ -1,0 +1,2 @@
+#include "HomeSampleBase.xcconfig"
+#include "../../../Pods/Target Support Files/Pods-Home-HomeSample/Pods-Home-HomeSample.homolog.xcconfig"

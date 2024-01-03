@@ -1,0 +1,60 @@
+name: Similarity
+options:
+  bundleIdPrefix: "com.jonatanortiz"
+  deploymentTarget:
+    iOS: '16.4'
+  createIntermediateGroups: true
+configs:
+  Debug: debug
+  Homolog: release
+  Release: release
+configFiles:
+  Debug: Configs/BaseDebug.xcconfig
+  Homolog: Configs/BaseHomolog.xcconfig
+  Release: Configs/BaseRelease.xcconfig
+settings:
+  SWIFT_VERSION: 5.0
+targets:
+  Similarity:
+    type: application
+    platform: iOS
+    configFiles:
+      Debug: Configs/AppDebug.xcconfig
+      Homolog: Configs/AppHomolog.xcconfig
+      Release: Configs/AppRelease.xcconfig
+    sources:
+      - path: Similarity
+    dependencies:
+      - target: Core/Core
+      - framework: Core.framework
+        implicit: true
+      - target: CoreInterface/CoreInterface
+      - framework: CoreInterface.framework
+        implicit: true
+      - target: Home/Home
+      - framework: Home.framework
+        implicit: true
+      - target: Profile/Profile
+      - framework: Profile.framework
+        implicit: true
+      - target: UI/UI
+      - framework: UI.framework
+        implicit: true
+    preBuildScripts:
+      - path: ${SWIFTGEN_SH_PATH}
+        name: SwiftGen
+        basedOnDependencyAnalysis: false
+      - path: ${SWIFTLINT_SH_PATH}
+        name: SwiftLint
+        basedOnDependencyAnalysis: false
+projectReferences:
+  Core:
+    path: ../Modules/Features/Core/Core.xcodeproj
+  CoreInterface:
+    path: ../Modules/Features/CoreInterface/CoreInterface.xcodeproj
+  Home:
+    path: ../Modules/Features/Home/Home.xcodeproj
+  Profile:
+    path: ../Modules/Features/Profile/Profile.xcodeproj
+  UI:
+    path: ../Modules/Features/UI/UI.xcodeproj

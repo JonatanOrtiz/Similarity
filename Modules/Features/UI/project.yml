@@ -1,0 +1,36 @@
+name: UI
+options:
+  bundleIdPrefix: "com.jonatanortiz"
+  deploymentTarget:
+    iOS: '16.4'
+  createIntermediateGroups: true
+configs:
+  Debug: debug
+  Homolog: release
+  Release: release
+configFiles:
+  Debug: Configs/BaseDebug.xcconfig
+  Homolog: Configs/BaseHomolog.xcconfig
+  Release: Configs/BaseRelease.xcconfig
+targets:
+  UI:
+    type: framework
+    platform: iOS
+    settings:
+      IPHONEOS_DEPLOYMENT_TARGET: ${IOS_DEPLOY_TARGET}
+    configFiles:
+      Debug: Configs/TargetDebug.xcconfig
+      Homolog: Configs/TargetHomolog.xcconfig
+      Release: Configs/TargetRelease.xcconfig
+    sources:
+      - path: UI
+    dependencies:
+      - framework: CoreInterface.framework
+        implicit: true
+    preBuildScripts:
+      - path: ${SWIFTGEN_SH_PATH}
+        name: SwiftGen
+        basedOnDependencyAnalysis: false
+      - path: ${SWIFTLINT_SH_PATH}
+        name: SwiftLint
+        basedOnDependencyAnalysis: false

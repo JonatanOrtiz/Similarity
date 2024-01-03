@@ -1,0 +1,75 @@
+name: Home
+options:
+  bundleIdPrefix: "com.jonatanortiz"
+  deploymentTarget:
+    iOS: '16.4'
+  createIntermediateGroups: true
+configs:
+  Debug: debug
+  Homolog: release
+  Release: release
+configFiles:
+  Debug: Configs/BaseDebug.xcconfig
+  Homolog: Configs/BaseHomolog.xcconfig
+  Release: Configs/BaseRelease.xcconfig
+targets:
+  Home:
+    type: framework
+    platform: iOS
+    settings:
+      IPHONEOS_DEPLOYMENT_TARGET: ${IOS_DEPLOY_TARGET}
+    configFiles:
+      Debug: Configs/TargetDebug.xcconfig
+      Homolog: Configs/TargetHomolog.xcconfig
+      Release: Configs/TargetRelease.xcconfig
+    sources:
+      - path: Home
+    dependencies:
+      - framework: Core.framework
+        implicit: true
+      - framework: CoreInterface.framework
+        implicit: true
+      - framework: UI.framework
+        implicit: true
+      - framework: Profile.framework
+        implicit: true
+    preBuildScripts:
+      - path: ${SWIFTGEN_SH_PATH}
+        name: SwiftGen
+        basedOnDependencyAnalysis: false
+      - path: ${SWIFTLINT_SH_PATH}
+        name: SwiftLint
+        basedOnDependencyAnalysis: false
+    postBuildScripts:
+  HomeTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      SWIFT_VERSION: ${IOS_TESTS_SWIFT_VERSION}
+      IPHONEOS_DEPLOYMENT_TARGET: ${IOS_TESTS_DEPLOY_TARGET}
+    configFiles:
+      Debug: Configs/UnitTestsDebug.xcconfig
+      Homolog: Configs/UnitTestsHomolog.xcconfig
+    sources:
+      - path: HomeTests
+    dependencies:
+      - target: Home
+        embed: false
+      - framework: CoreInterface.framework
+        embed: false
+      - framework: Profile.framework
+        implicit: false
+  HomeSample:
+    type: application
+    platform: iOS
+    sources: [HomeSample]
+    dependencies:
+      - target: Home
+      - framework: Core.framework
+        implicit: true
+      - framework: CoreInterface.framework
+        implicit: true
+      - framework: UI.framework
+        implicit: true
+      - framework: Profile.framework
+        implicit: true

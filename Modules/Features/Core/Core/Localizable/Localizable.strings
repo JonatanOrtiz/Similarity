@@ -1,0 +1,8 @@
+// MARK: - Generic Error
+"genericError.title" = "Error";
+
+// MARK: - GoogleSignInError
+"googleSignInError.clientID" = "Error on clientID";
+"googleSignInError.presentingViewController" = "Error presenting alert";
+"googleSignInError.token" = "Error on user Token";
+"googleSignInError.createUser" = "Error creating the user";

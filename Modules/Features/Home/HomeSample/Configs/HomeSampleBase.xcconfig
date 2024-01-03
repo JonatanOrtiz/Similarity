@@ -1,0 +1,6 @@
+TARGETED_DEVICE_FAMILY = 1
+IPHONEOS_DEPLOYMENT_TARGET = 16.4
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
+INFOPLIST_FILE = HomeSample/Resources/Info.plist
+BUNDLE_ID = com.jonatanortiz.Home.HomeSample
+PRODUCT_BUNDLE_IDENTIFIER = com.jonatanortiz.Home.HomeSample

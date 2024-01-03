@@ -1,0 +1,58 @@
+name: CoreInterface
+options:
+  bundleIdPrefix: "com.jonatanortiz"
+  deploymentTarget:
+    iOS: '16.4'
+  createIntermediateGroups: true
+configs:
+  Debug: debug
+  Homolog: release
+  Release: release
+configFiles:
+  Debug: Configs/BaseDebug.xcconfig
+  Homolog: Configs/BaseHomolog.xcconfig
+  Release: Configs/BaseRelease.xcconfig
+targets:
+  CoreInterface:
+    type: framework
+    platform: iOS
+    settings:
+      IPHONEOS_DEPLOYMENT_TARGET: ${IOS_DEPLOY_TARGET}
+    configFiles:
+      Debug: Configs/TargetDebug.xcconfig
+      Homolog: Configs/TargetHomolog.xcconfig
+      Release: Configs/TargetRelease.xcconfig
+    sources:
+      - path: CoreInterface
+    dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseAnalyticsSwift
+      - package: Firebase
+        product: FirebaseAuth
+      - package: Firebase
+        product: FirebaseAuthCombine-Community
+      - package: Firebase
+        product: FirebaseCrashlytics
+      - package: Firebase
+        product: FirebaseFirestore
+      - package: Firebase
+        product: FirebaseFirestoreCombine-Community
+      - package: Firebase
+        product: FirebaseFirestoreSwift
+      - package: GoogleSignIn
+    preBuildScripts:
+      - path: ${SWIFTGEN_SH_PATH}
+        name: SwiftGen
+        basedOnDependencyAnalysis: false
+      - path: ${SWIFTLINT_SH_PATH}
+        name: SwiftLint
+        basedOnDependencyAnalysis: false
+packages:
+  Firebase:
+    url: "https://github.com/firebase/firebase-ios-sdk.git"
+    version: "10.0.0"
+  GoogleSignIn:
+    url: "https://github.com/google/GoogleSignIn-iOS"
+    version: "7.0.0"

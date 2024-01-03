@@ -1,0 +1,17 @@
+//MARK: - Common
+"common.ok" = "Ok";
+"common.tryAgain" = "Try Again";
+"common.genericErrorTitle" = "Error";
+
+//MARK: - SignIn
+"signIn.emailPlaceholder" = "Email";
+"signIn.passwordPlaceholder" = "Password";
+"signIn.signInButton" = "SignIn";
+"signIn.signInWithGoogleButton" = "SignIn with Google";
+"signIn.registerButton" = "Register";
+
+//MARK: - Register
+"register.emailPlaceholder" = "Email";
+"register.passwordPlaceholder" = "Password";
+"register.signUpButton" = "SignUp";
+"register.signUpWithGoogleButton" = "SignUp with Google";
