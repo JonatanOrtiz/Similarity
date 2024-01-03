@@ -1,10 +1,6 @@
 <h1 align="center">Similarity</h1>
 
 <p align="center">
-  An app dedicated to the study and implementation of modern software development practices and architectures.
-</p>
-
-<p align="center">
   <!-- Replace with actual badges -->
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" />
   <img src="https://img.shields.io/badge/license-MIT-green.svg" />
@@ -12,7 +8,7 @@
 
 ## Overview 📚
 
-Dive into the world of iOS development with a hands-on approach to learning, exploring, and implementing the best practices in software development and architectural design.
+An app dedicated to the study and implementation of modern software development practices and architectures.
 
 ### Key Focus Areas 🔍
 
