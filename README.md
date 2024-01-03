@@ -32,14 +32,6 @@ Dive into the world of iOS development with a hands-on approach to learning, exp
 
 To configure and run this project, ensure XCodeGen and CocoaPods are installed. Then, execute the `make generate` command in the root of the project. For Firebase integration, download the appropriate Firebase configuration files (access granted upon request).
 
-## Contributing 🤝
-
-We welcome contributions and suggestions! Please fork the repository and submit pull requests for any features, bug fixes, or improvements you have made.
-
-## License 📄
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
 ---
 
 <p align="center">
