@@ -1,4 +1,4 @@
-<h1 align="center">🌟 Similarity 🌟</h1>
+<h1 align="center">Similarity</h1>
 
 <p align="center">
   An app dedicated to the study and implementation of modern software development practices and architectures.
