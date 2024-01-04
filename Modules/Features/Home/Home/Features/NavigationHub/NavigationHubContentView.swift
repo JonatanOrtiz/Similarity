@@ -81,10 +81,10 @@ public struct NavigationHubContentView: View {
     
     func tabColors(_ currentTab: Tab, _ tab: Tab) -> [Color] {
         [
-            .purple.opacity(tabOpacity(currentTab, tab)),
-            .purple.opacity(tabOpacity(currentTab, tab)),
-            .purple.opacity(tabOpacity(currentTab, tab)),
-            .blue.opacity(tabOpacity(currentTab, tab)),
+            .appPurple.opacity(tabOpacity(currentTab, tab)),
+            .appPurple.opacity(tabOpacity(currentTab, tab)),
+            .appPurple.opacity(tabOpacity(currentTab, tab)),
+            .appBlue.opacity(tabOpacity(currentTab, tab)),
             .white.opacity(tabOpacity(currentTab, tab)),
             .white.opacity(tabOpacity(currentTab, tab))
         ]

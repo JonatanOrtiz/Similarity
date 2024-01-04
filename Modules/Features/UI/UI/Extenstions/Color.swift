@@ -19,4 +19,8 @@ public extension Color {
     static var appPurple: Self {
         return Color(Colors.appPurple.rawValue, bundle: Bundle.ui)
     }
+
+    static var appBlue: Self {
+        return Color(Colors.appBlue.rawValue, bundle: Bundle.ui)
+    }
 }
