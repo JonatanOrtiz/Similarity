@@ -33,5 +33,7 @@ To configure and run this project, ensure XCodeGen and CocoaPods are installed. 
 <p align="center">
   <b>Similarity</b> &copy; 2024 Jonatan Ortiz Maldonado
 </p>
+<p align="center">
 
 ![Group 3](https://github.com/JonatanOrtiz/Similarity/assets/52891649/3062d504-a7f7-42f7-ac3f-0d7330e4cadc)
+</p>
