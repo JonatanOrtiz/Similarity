@@ -10,8 +10,8 @@ import SwiftUI
 struct CustomTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<_Label>) -> some View {
         configuration
-            .foregroundColor(.primary)
+            .foregroundColor(.primaryColor)
             .padding(10)
-            .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 1))
+            .background(RoundedRectangle(cornerRadius: 20).stroke(Color.primaryColor, lineWidth: 1))
     }
 }

@@ -9,8 +9,6 @@ import SwiftUI
 import CoreInterface
 
 public extension View {
-    typealias Action = () -> ()
-    
     func innerShadow<S: Shape, SS: ShapeStyle>(
         shape: S,
         color: SS,
@@ -35,6 +33,7 @@ public extension View {
     func flatGlassCard() -> some View {
         self
             .frame(maxWidth: .infinity)
+            .background(Color.primaryReverse.opacity(0.2))
             .background(Blur(radius: 25, opaque: true))
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .innerShadow(
@@ -110,8 +109,8 @@ public extension View {
         image: AssetImage,
         title: String,
         message: String,
-        primaryButton: FeedBackBottomSheet.Button? = nil,
-        secondaryButton: FeedBackBottomSheet.Button? = nil
+        primaryButton: FeedBackBottomSheetButton? = nil,
+        secondaryButton: FeedBackBottomSheetButton? = nil
     ) -> some View {
         self.sheet(isPresented: isPresented) {
             FeedBackBottomSheet(
@@ -126,8 +125,8 @@ public extension View {
 
     func feedBackBottomSheet(
         customError: Binding<CustomError?>,
-        primaryButton: FeedBackBottomSheet.Button? = nil,
-        secondaryButton: FeedBackBottomSheet.Button? = nil
+        primaryButton: FeedBackBottomSheetButton? = nil,
+        secondaryButton: FeedBackBottomSheetButton? = nil
     ) -> some View {
         self.sheet(item: customError) { error in
             FeedBackBottomSheet(

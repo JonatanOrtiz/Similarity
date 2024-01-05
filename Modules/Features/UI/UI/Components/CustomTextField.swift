@@ -34,5 +34,6 @@ public struct CustomTextField: View {
             .keyboardType(keyboardType ?? .default)
             .textContentType(textContentType)
             .autocapitalization(autocapitalization ?? .none)
+            .autocorrectionDisabled()
     }
 }

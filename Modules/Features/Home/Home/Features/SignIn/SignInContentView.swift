@@ -16,69 +16,88 @@ public struct SignInContentView<ViewModeling>: View where ViewModeling: SignInVi
     public var body: some View {
         NavigationView {
             VStack(alignment: .center) {
-                Image.asset(.logo)
-                    .resizable()
-                    .cornerRadius(20)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 250, height: 250)
-                    .padding(.bottom, 40)
-                    .padding(.top, 50)
-
-                CustomTextField(
-                    text: $email,
-                    placeholder: Strings.SignIn.emailPlaceholder,
-                    keyboardType: .emailAddress,
-                    textContentType: .emailAddress
-                )
-                .padding(.horizontal, 20)
-                
-                CustomSecureField(
-                    text: $password,
-                    placeholder: Strings.SignIn.passwordPlaceholder
-                )
-                .padding(.horizontal, 20)
-
-                Button {
-                    viewModel.signIn(email: email, password: password)
-                } label: {
-                    Text(Strings.SignIn.signInButton)
-                        .headlineBold(.white.opacity(0.75))
-                        .frame(height: 50)
-                }
-                .flatGlassCard()
-                .padding(.horizontal, 10)
-                
-                Button {
-                    viewModel.signInWithGoogle()
-                } label: {
-                    Text(Strings.SignIn.signInWithGoogleButton)
-                        .headlineBold(.white.opacity(0.75))
-                        .frame(height: 50)
-                }
-                .flatGlassCard()
-                .padding(.horizontal, 10)
-
-                NavigationLink(destination: RegisterFactory.make()) {
-                    Text(Strings.SignIn.registerButton)
-                        .headlineBold(.white.opacity(0.75))
-                        .frame(height: 50)
-                        .flatGlassCard()
-                        .padding(.horizontal, 10)
-                }
+                LogoView
+                EmailTextField
+                PasswordTextField
+                SignInButton
+                SignInWithGoogleButton
+                RegisterButton
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .navigationBarHidden(true)
             .backgroundImage()
             .feedBackBottomSheet(
                 customError: $viewModel.error,
-                primaryButton: FeedBackBottomSheet.Button(title: Strings.Common.ok) {
+                primaryButton: .init(title: Strings.Common.ok) {
                     viewModel.error = nil
                 },
-                secondaryButton: FeedBackBottomSheet.Button(title: Strings.Common.tryAgain) {
+                secondaryButton: .init(title: Strings.Common.tryAgain) {
                     viewModel.error = nil
                     viewModel.tryAgainAction?()
                 }
             )
+        }
+        .tint(.primaryColor)
+    }
+
+    var LogoView: some View {
+        Image.asset(.logo)
+            .resizable()
+            .cornerRadius(20)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 250, height: 250)
+            .padding(.bottom, 40)
+            .padding(.top, 50)
+    }
+
+    var EmailTextField: some View {
+        CustomTextField(
+            text: $email,
+            placeholder: Strings.SignIn.emailPlaceholder,
+            keyboardType: .emailAddress,
+            textContentType: .emailAddress
+        )
+        .padding(.horizontal, 20)
+    }
+
+    var PasswordTextField: some View {
+        CustomSecureField(
+            text: $password,
+            placeholder: Strings.SignIn.passwordPlaceholder
+        )
+        .padding(.horizontal, 20)
+    }
+
+    var SignInButton: some View {
+        Button {
+            viewModel.signIn(email: email, password: password)
+        } label: {
+            Text(Strings.SignIn.signInButton)
+                .headlineBold(.primaryColor)
+                .frame(height: 50)
+        }
+        .flatGlassCard()
+        .padding(.horizontal, 10)
+    }
+
+    var SignInWithGoogleButton: some View {
+        Button {
+            viewModel.signInWithGoogle()
+        } label: {
+            Text(Strings.SignIn.signInWithGoogleButton)
+                .headlineBold(.primaryColor)
+                .frame(height: 50)
+        }
+        .flatGlassCard()
+        .padding(.horizontal, 10)
+    }
+
+    var RegisterButton: some View {
+        NavigationLink(destination: RegisterFactory.make()) {
+            Text(Strings.SignIn.registerButton)
+                .headlineBold(.primaryColor)
+                .frame(height: 50)
+                .flatGlassCard()
+                .padding(.horizontal, 10)
         }
     }
 }

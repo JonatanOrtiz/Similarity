@@ -8,9 +8,10 @@
 import SwiftUI
 
 public enum Colors: String {
-    case primary
+    case primaryColor
     case primaryReverse
     case secondary
     case appPurple
     case appBlue
+    case darkPurple
 }

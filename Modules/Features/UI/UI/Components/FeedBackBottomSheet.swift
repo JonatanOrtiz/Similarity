@@ -15,15 +15,15 @@ public struct FeedBackBottomSheet: View {
     let image: AssetImage?
     let title: String?
     let message: String?
-    let primaryButton: Button?
-    let secondaryButton: Button?
+    let primaryButton: FeedBackBottomSheetButton?
+    let secondaryButton: FeedBackBottomSheetButton?
     
     public init(
         image: AssetImage?,
         title: String?,
         message: String?,
-        primaryButton: Button? = nil,
-        secondaryButton: Button? = nil
+        primaryButton: FeedBackBottomSheetButton? = nil,
+        secondaryButton: FeedBackBottomSheetButton? = nil
     ) {
         self.image = image
         self.title = title
@@ -58,7 +58,7 @@ public struct FeedBackBottomSheet: View {
             if let primaryButton {
                 FlatGlassButton(
                     text: primaryButton.title,
-                    backgroundColor: .blue.opacity(0.1),
+                    backgroundColor: .appBlue.opacity(0.2),
                     foregroundColor: .white.opacity(0.75),
                     horizontalPadding: 15,
                     action: primaryButton.action
@@ -68,7 +68,7 @@ public struct FeedBackBottomSheet: View {
             if let secondaryButton {
                 FlatGlassButton(
                     text: secondaryButton.title,
-                    backgroundColor: .purple.opacity(0.1),
+                    backgroundColor: .appPurple.opacity(0.2),
                     foregroundColor: .white.opacity(0.75),
                     horizontalPadding: 15,
                     action: secondaryButton.action
@@ -80,14 +80,16 @@ public struct FeedBackBottomSheet: View {
         .presentationBackground(Color.primaryReverse)
         .presentationDragIndicator(.visible)
     }
-    
-    public struct Button {
-        var title: String
-        var action: Action
-        
-        public init(title: String, action: @escaping Action) {
-            self.title = title
-            self.action = action
-        }
+}
+
+public struct FeedBackBottomSheetButton {
+    public typealias Action = () -> Void
+
+    var title: String
+    var action: Action
+
+    public init(title: String, action: @escaping Action) {
+        self.title = title
+        self.action = action
     }
 }
