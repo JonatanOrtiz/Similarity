@@ -11,7 +11,7 @@ public enum SignInFactory {
     public static func make() -> some View {
         let dependencyContainer = DependencyContainer()
         let viewModel = SignInViewModel(dependencies: dependencyContainer)
-        let contentView = SignInContentView(viewModel: viewModel)
+        let contentView = SignInView(viewModel: viewModel)
         
         return contentView
     }

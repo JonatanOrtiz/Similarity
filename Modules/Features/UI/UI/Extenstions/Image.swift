@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - AssetImage
 public extension Image {
     static func asset(_ image: AssetImage) -> Self {
         return Image(image.rawValue, bundle: .ui)
@@ -14,5 +15,12 @@ public extension Image {
 
     static func asset(_ imageName: String) -> Self {
         return Image(imageName, bundle: .ui)
+    }
+}
+
+// MARK: - AssetIcon
+public extension Image {
+    static func asset(_ image: AssetIcon) -> Self {
+        return Image(image.rawValue, bundle: .ui)
     }
 }

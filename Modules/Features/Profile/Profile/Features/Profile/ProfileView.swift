@@ -42,38 +42,33 @@ public struct ProfileView: View {
             }
         }
         .tabViewStyle(PageTabViewStyle())
-        .frame(height: UIScreen.main.bounds.height / 1.7)
-        .cornerRadius(20)
-        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+        .frame(height: UIScreen.main.bounds.height / 1.5)
+        .cornerRadius(20, corners: [.bottomRight, .bottomLeft])
         .overlay(alignment: .bottomLeading) {
             ProfileDataView
         }
     }
     
     var ProfileDataView: some View {
-        VStack(alignment: .leading, spacing: 3) {
+        VStack(alignment: .leading, spacing: 4) {
             Text("Andressa, 23")
                 .secondaryTitleBold(.white)
-                .padding(EdgeInsets(top: 10, leading: 12, bottom: 0, trailing: 0))
             HStack {
-                LinearGradient(colors:[.purple,.purple,.purple,.blue,.white,.white], startPoint: .bottomLeading, endPoint: .topTrailing)
-                    .mask(Image(systemName: "suitcase.fill")
-                    )
-                    .frame(width: 25, height: 20)
+                Image.asset(.suitcase)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
                 Text("Designer")
                     .calloutBold(.white)
             }
-            .padding(.leading, 2)
-            .padding(.leading, 10)
             HStack {
-                Image(systemName: "mappin.and.ellipse")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.blue, .purple)
+                Image.asset(.pin)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
                 Text("10 km")
                     .calloutBold(.white)
-                    .padding(.leading, 3)
             }
-            .padding(.leading, 15)
             .padding(.bottom, 1)
         }
         .allowsHitTesting(false)
@@ -90,9 +85,8 @@ public struct ProfileView: View {
                 .calloutBold()
                 .fixedSize(horizontal: false, vertical: true)
                 .padding()
-                .padding(.bottom, 10)
+                .padding(.bottom, 500)
         }
-        .flatGlassCard()
     }
     
     struct ImageContainerView: View {

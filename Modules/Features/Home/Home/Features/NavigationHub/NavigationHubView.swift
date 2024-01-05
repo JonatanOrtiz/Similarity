@@ -1,5 +1,5 @@
 //
-//  NavigationHubContentView.swift
+//  NavigationHubView.swift
 //  HomeSample
 //
 //  Created by Jonatan Ortiz on 11/07/23.
@@ -9,7 +9,7 @@ import SwiftUI
 import UI
 import Profile
 
-public struct NavigationHubContentView: View {
+public struct NavigationHubView: View {
     public init() {
         UITabBar.appearance().isHidden = true
     }
@@ -94,7 +94,7 @@ public struct NavigationHubContentView: View {
 struct HomeContentView_Previews: PreviewProvider {
     static var previews: some View {
         PreviewDependencyOrchestrator.start()
-        return NavigationHubContentView()
+        return NavigationHubView()
     }
 }
 

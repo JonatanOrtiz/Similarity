@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Home
+import Profile
 import CoreInterface
 
 @main
@@ -25,9 +26,10 @@ struct AppEntryPoint: View {
     
     var body: some View {
         if auth.user != nil {
-            NavigationHubContentView()
+            NavigationHubView()
         } else {
-            SignInFactory.make()
+//            SignInFactory.make()
+            ProfileView()
         }
     }
 }

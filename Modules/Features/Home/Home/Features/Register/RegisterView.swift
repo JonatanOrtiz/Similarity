@@ -1,5 +1,5 @@
 //
-//  RegisterContentView.swift
+//  RegisterView.swift
 //  Home
 //
 //  Created by Jonatan Ortiz on 12/09/23.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UI
 
-public struct RegisterContentView<ViewModeling>: View where ViewModeling: RegisterViewModeling {
+public struct RegisterView<ViewModeling>: View where ViewModeling: RegisterViewModeling {
     @StateObject var viewModel: ViewModeling
     @State private var email = String()
     @State private var password = String()
@@ -30,7 +30,7 @@ public struct RegisterContentView<ViewModeling>: View where ViewModeling: Regist
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .backgroundImage()
-            .feedBackBottomSheet(
+            .errorBottomSheet(
                 customError: $viewModel.error,
                 primaryButton: .init(title: Strings.Common.ok) {
                     viewModel.error = nil
@@ -97,9 +97,9 @@ public struct RegisterContentView<ViewModeling>: View where ViewModeling: Regist
     }
 }
 
-struct RegisterContentView_Previews: PreviewProvider {
+struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
         PreviewDependencyOrchestrator.start()
-        return RegisterContentView(viewModel: RegisterViewModel(dependencies: DependencyContainer()))
+        return RegisterView(viewModel: RegisterViewModel(dependencies: DependencyContainer()))
     }
 }

@@ -14,7 +14,7 @@ struct HomeSampleApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationHubContentView()
+            NavigationHubView()
         }
     }
 }

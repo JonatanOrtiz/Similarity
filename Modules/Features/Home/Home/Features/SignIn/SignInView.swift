@@ -1,5 +1,5 @@
 //
-//  SignInContentView.swift
+//  SignInView.swift
 //  Home
 //
 //  Created by Jonatan Ortiz on 12/09/23.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UI
 
-public struct SignInContentView<ViewModeling>: View where ViewModeling: SignInViewModeling {
+public struct SignInView<ViewModeling>: View where ViewModeling: SignInViewModeling {
     @StateObject var viewModel: ViewModeling
     @State private var email = String()
     @State private var password = String()
@@ -32,7 +32,7 @@ public struct SignInContentView<ViewModeling>: View where ViewModeling: SignInVi
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .backgroundImage()
-            .feedBackBottomSheet(
+            .errorBottomSheet(
                 customError: $viewModel.error,
                 primaryButton: .init(title: Strings.Common.ok) {
                     viewModel.error = nil
@@ -109,9 +109,9 @@ public struct SignInContentView<ViewModeling>: View where ViewModeling: SignInVi
     }
 }
 
-struct SignInContentView_Previews: PreviewProvider {
+struct SignInView_Previews: PreviewProvider {
     static var previews: some View {
         PreviewDependencyOrchestrator.start()
-        return SignInContentView(viewModel: SignInViewModel(dependencies: DependencyContainer()))
+        return SignInView(viewModel: SignInViewModel(dependencies: DependencyContainer()))
     }
 }

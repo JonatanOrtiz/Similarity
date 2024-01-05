@@ -141,7 +141,7 @@ public extension View {
         }
     }
 
-    func feedBackBottomSheet(
+    func errorBottomSheet(
         customError: Binding<CustomError?>,
         primaryButton: FeedBackBottomSheetButton? = nil,
         secondaryButton: FeedBackBottomSheetButton? = nil

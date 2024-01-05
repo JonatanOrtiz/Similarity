@@ -11,7 +11,7 @@ public enum RegisterFactory {
     public static func make() -> some View {
         let dependencyContainer = DependencyContainer()
         let viewModel = RegisterViewModel(dependencies: dependencyContainer)
-        let contentView = RegisterContentView(viewModel: viewModel)
+        let contentView = RegisterView(viewModel: viewModel)
 
         return contentView
     }
