@@ -63,6 +63,24 @@ public extension View {
                 opacity: 0.4
             )
     }
+
+    func cardStyle(background: Color = .appPurple) -> some View {
+        self
+            .frame(maxWidth: .infinity)
+            .background(background)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .innerShadow(
+                shape: RoundedRectangle(cornerRadius: 20),
+                color: .white,
+                lineWidth: 2,
+                offsetX: 0.2,
+                offsetY: 0.5,
+                blur: 0,
+                blendMode: .overlay,
+                opacity: 0.4
+            )
+            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+    }
     
     func backgroundBlur(radius: CGFloat, opaque: Bool) -> some View {
         self.background(Blur(radius: radius, opaque: opaque))

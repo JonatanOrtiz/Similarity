@@ -16,12 +16,19 @@ public struct SignInContentView<ViewModeling>: View where ViewModeling: SignInVi
     public var body: some View {
         NavigationView {
             VStack(alignment: .center) {
+                Spacer()
                 LogoView
+                Spacer()
                 EmailTextField
+                    .padding(.bottom, 5)
                 PasswordTextField
+                    .padding(.bottom, 5)
                 SignInButton
+                    .padding(.bottom, 5)
                 SignInWithGoogleButton
+                    .padding(.bottom, 5)
                 RegisterButton
+                    .padding(.bottom, 20)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .backgroundImage()
@@ -72,10 +79,10 @@ public struct SignInContentView<ViewModeling>: View where ViewModeling: SignInVi
             viewModel.signIn(email: email, password: password)
         } label: {
             Text(Strings.SignIn.signInButton)
-                .headlineBold(.primaryColor)
+                .headlineBold(.white.opacity(0.85))
                 .frame(height: 50)
         }
-        .flatGlassCard()
+        .cardStyle()
         .padding(.horizontal, 10)
     }
 
@@ -84,19 +91,19 @@ public struct SignInContentView<ViewModeling>: View where ViewModeling: SignInVi
             viewModel.signInWithGoogle()
         } label: {
             Text(Strings.SignIn.signInWithGoogleButton)
-                .headlineBold(.primaryColor)
+                .headlineBold(.white.opacity(0.85))
                 .frame(height: 50)
         }
-        .flatGlassCard()
+        .cardStyle(background: .appBlue)
         .padding(.horizontal, 10)
     }
 
     var RegisterButton: some View {
         NavigationLink(destination: RegisterFactory.make()) {
             Text(Strings.SignIn.registerButton)
-                .headlineBold(.primaryColor)
+                .headlineBold(.white.opacity(0.85))
                 .frame(height: 50)
-                .flatGlassCard()
+                .cardStyle()
                 .padding(.horizontal, 10)
         }
     }

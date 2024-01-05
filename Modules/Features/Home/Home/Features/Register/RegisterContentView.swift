@@ -16,11 +16,17 @@ public struct RegisterContentView<ViewModeling>: View where ViewModeling: Regist
     public var body: some View {
         NavigationView {
             VStack(alignment: .center) {
+                Spacer()
                 LogoView
+                Spacer()
                 EmailTextField
+                    .padding(.bottom, 5)
                 PasswordTextField
+                    .padding(.bottom, 5)
                 SignUpButton
+                    .padding(.bottom, 5)
                 SignUpWithGoogleButton
+                    .padding(.bottom, 20)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .backgroundImage()
@@ -74,7 +80,7 @@ public struct RegisterContentView<ViewModeling>: View where ViewModeling: Regist
                 .headlineBold(.white.opacity(0.75))
                 .frame(height: 50)
         }
-        .flatGlassCard()
+        .cardStyle()
         .padding(.horizontal, 10)
     }
 
@@ -86,7 +92,7 @@ public struct RegisterContentView<ViewModeling>: View where ViewModeling: Regist
                 .headlineBold(.white.opacity(0.75))
                 .frame(height: 50)
         }
-        .flatGlassCard()
+        .cardStyle(background: .appBlue)
         .padding(.horizontal, 10)
     }
 }
