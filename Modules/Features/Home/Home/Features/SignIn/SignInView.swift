@@ -47,7 +47,7 @@ public struct SignInView<ViewModeling>: View where ViewModeling: SignInViewModel
     }
 
     var LogoView: some View {
-        Image.asset(.logo)
+        Image.assetImage(.logo)
             .resizable()
             .cornerRadius(20)
             .aspectRatio(contentMode: .fit)

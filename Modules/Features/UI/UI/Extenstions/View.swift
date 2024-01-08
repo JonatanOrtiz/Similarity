@@ -89,7 +89,7 @@ public extension View {
     func backgroundImage(_ image: AssetImage? = nil) -> some View {
         self
             .background(
-                Image.asset(image ?? .backgroundImage)
+                Image.assetImage(image ?? .backgroundImage)
                     .resizable()
                     .ignoresSafeArea()
             )

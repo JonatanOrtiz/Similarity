@@ -54,7 +54,7 @@ public struct ProfileView: View {
             Text("Andressa, 23")
                 .secondaryTitleBold(.white)
             HStack {
-                Image.asset(.suitcase)
+                Image.assetIcon(.suitcase)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20, height: 20)
@@ -62,7 +62,7 @@ public struct ProfileView: View {
                     .calloutBold(.white)
             }
             HStack {
-                Image.asset(.pin)
+                Image.assetIcon(.pin)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20, height: 20)
@@ -94,7 +94,7 @@ public struct ProfileView: View {
         var body: some View {
             Color.clear
                 .overlay(
-                    Image.asset(image)
+                    Image.assetImage(image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                 )

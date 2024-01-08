@@ -35,7 +35,7 @@ public struct FeedBackBottomSheet: View {
     public var body: some View {
         VStack(spacing: 15) {
             if let image {
-                Image.asset(image)
+                Image.assetImage(image)
                     .resizable()
                     .scaledToFit()
                     .frame(height: UIScreen.main.bounds.height / 7)

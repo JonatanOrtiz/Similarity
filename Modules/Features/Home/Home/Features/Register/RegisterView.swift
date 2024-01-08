@@ -45,7 +45,7 @@ public struct RegisterView<ViewModeling>: View where ViewModeling: RegisterViewM
     }
 
     var LogoView: some View {
-        Image.asset(.logo)
+        Image.assetImage(.logo)
             .resizable()
             .cornerRadius(20)
             .aspectRatio(contentMode: .fit)
