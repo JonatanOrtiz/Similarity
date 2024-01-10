@@ -10,27 +10,53 @@ import UI
 
 public struct ProfileView: View {
     public init() {}
-    
+
+    @State private var selectedImageIndex = 0
+
     let imageUrls: [AssetImage] = [.someImageExample1, .someImageExample2, .someImageExample3, .someImageExample4, .someImageExample5, .someImageExample6]
     
     public var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading) {
-                ImagesCarrousel
-                AboutMeView
+        VStack {
+            HStack {
+                Image(systemName: "list.bullet")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.primaryColor)
+                    .padding(.leading)
+                Spacer()
+                Text("Similarity")
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.appBlue, .appPurple]), startPoint: .leading, endPoint: .trailing))
+                Spacer()
+                Image(systemName: "equal.circle")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.primaryColor)
+                    .padding(.trailing)
             }
-            .padding(.bottom, 60)
-        }
-        .onAppear {
-            UIScrollView.appearance().bounces = false
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading) {
+                    ImagesCarrousel
+                    AboutMeView
+                }
+                .padding(.bottom, 60)
+            }
+            .onAppear {
+                UIScrollView.appearance().bounces = false
+            }
         }
         .backgroundImage()
     }
-    
+
     var ImagesCarrousel: some View {
-        TabView {
+        TabView(selection: $selectedImageIndex) {
             ForEach(0..<imageUrls.count, id: \.self) { index in
-                ImageContainerView(image: imageUrls[index])
+                ImageContainerView(image: imageUrls[index],
+                                   onTapLeft: {
+                    if selectedImageIndex > 0 { selectedImageIndex -= 1 }
+                },
+                                   onTapRight: {
+                    if selectedImageIndex < imageUrls.count - 1 { selectedImageIndex += 1 }
+                })
+                .tag(index)
                     .overlay {
                         LinearGradient(
                             gradient: Gradient(colors: [.black, .black, .clear, .clear, .clear]),
@@ -41,9 +67,10 @@ public struct ProfileView: View {
                     }
             }
         }
-        .tabViewStyle(PageTabViewStyle())
+        .tabViewStyle(.page(indexDisplayMode: .always))
         .frame(height: UIScreen.main.bounds.height / 1.5)
-        .cornerRadius(20, corners: [.bottomRight, .bottomLeft])
+        .cornerRadius(20)
+        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
         .overlay(alignment: .bottomLeading) {
             ProfileDataView
         }
@@ -51,16 +78,8 @@ public struct ProfileView: View {
     
     var ProfileDataView: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Andressa, 23")
+            Text("Natalie, 23")
                 .secondaryTitleBold(.white)
-            HStack {
-                Image.assetIcon(.suitcase)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20, height: 20)
-                Text("Designer")
-                    .calloutBold(.white)
-            }
             HStack {
                 Image.assetIcon(.pin)
                     .resizable()
@@ -72,33 +91,43 @@ public struct ProfileView: View {
             .padding(.bottom, 1)
         }
         .allowsHitTesting(false)
+        .padding(EdgeInsets(top: 0, leading: 10, bottom: 1, trailing: 0))
         .padding()
     }
     
     var AboutMeView: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 15) {
             Text.localized(LocalizedStringKey(Strings.Profile.aboutMe))
-                .secondaryTitleBold()
+                .secondaryTitleBold(.appWhite)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(EdgeInsets(top: 20, leading: 15, bottom: 0, trailing: 20))
-            Text("Hello, my name is Emily and I like to walk my dog.\nI like to go to concerts, watch series and movies and discover new places and different foods. I like both the beach and the mountains and tourist cities and I love all animals.\nI do some modeling jobs.\nIf I don't answer here, follow me on the other network and send me a message and I'll always answer.\n@andr_essa_novais \u{2764}")
-                .calloutBold()
+            Text("I do some modeling jobs.\nIf I don't answer here, follow me on the other network and send me a message and I'll always answer.\n@andr_essa_novais \u{2764}")
+                .bodyBold(.white)
+                .lineSpacing(7)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding()
-                .padding(.bottom, 500)
         }
+        .padding(18)
+        .flatGlassCard(color: .appPurple)
+        .padding(.bottom, 500)
     }
-    
+
     struct ImageContainerView: View {
         let image: AssetImage
+        var onTapLeft: () -> Void
+        var onTapRight: () -> Void
+
         var body: some View {
-            Color.clear
-                .overlay(
-                    Image.assetImage(image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                )
-                .clipped()
+            GeometryReader { geometry in
+                Image.assetImage(image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .onTapGesture { location in
+                        if location.x < geometry.size.width / 2 {
+                            onTapLeft()
+                        } else {
+                            onTapRight()
+                        }
+                    }
+            }
         }
     }
 }

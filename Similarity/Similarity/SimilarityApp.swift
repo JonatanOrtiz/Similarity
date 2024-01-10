@@ -28,8 +28,7 @@ struct AppEntryPoint: View {
         if auth.user != nil {
             NavigationHubView()
         } else {
-//            SignInFactory.make()
-            ProfileView()
+            NavigationHubView()
         }
     }
 }

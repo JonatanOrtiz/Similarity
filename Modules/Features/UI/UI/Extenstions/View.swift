@@ -30,10 +30,10 @@ public extension View {
         }
     }
     
-    func flatGlassCard() -> some View {
+    func flatGlassCard(color: Color = .primaryReverse) -> some View {
         self
             .frame(maxWidth: .infinity)
-            .background(Color.primaryReverse.opacity(0.2))
+            .background(color)
             .background(Blur(radius: 25, opaque: true))
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .innerShadow(

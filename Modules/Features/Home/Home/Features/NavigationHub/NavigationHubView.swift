@@ -14,7 +14,7 @@ public struct NavigationHubView: View {
         UITabBar.appearance().isHidden = true
     }
     
-    @State var currentTab: Tab = .profilesList
+    @State var currentTab: Tab = .userProfile
     
     public var body: some View {
         ZStack(alignment: .bottom) {
@@ -29,7 +29,7 @@ public struct NavigationHubView: View {
                     .backgroundImage()
                     .tag(Tab.likes)
                 
-                SignInFactory.make()
+                ProfileView()
                 .tag(Tab.profilesList)
                 
                 Text("Screen4")
