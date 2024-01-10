@@ -32,8 +32,8 @@ To configure and run this project, ensure XCodeGen and CocoaPods are installed. 
 
 
 <p align="center">
-  <img src=https://github.com/JonatanOrtiz/Similarity/assets/52891649/3062d504-a7f7-42f7-ac3f-0d7330e4cadc alt="App SigIn Screenshot" width="300"/>
-  <img src=https://github.com/JonatanOrtiz/Similarity/assets/52891649/d10c126d-3a73-44cf-b7b3-576b75102e7d alt="App Profile Screenshot" width="300"/>
+  <img src=https://github.com/JonatanOrtiz/Similarity/assets/52891649/3062d504-a7f7-42f7-ac3f-0d7330e4cadc alt="App SigIn Screenshot" width="200"/>
+  <img src=https://github.com/JonatanOrtiz/Similarity/assets/52891649/d10c126d-3a73-44cf-b7b3-576b75102e7d alt="App Profile Screenshot" width="200"/>
 </p>
 
 <p align="center">
