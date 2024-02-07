@@ -46,7 +46,7 @@ public extension View {
                 blendMode: .overlay,
                 opacity: 0.4
             )
-            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+            .padding(0, 10, 0, 10)
     }
     
     func flatGlass() -> some View {
@@ -79,7 +79,7 @@ public extension View {
                 blendMode: .overlay,
                 opacity: 0.4
             )
-            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+            .padding(0, 10, 0, 10)
     }
     
     func backgroundBlur(radius: CGFloat, opaque: Bool) -> some View {
@@ -155,5 +155,14 @@ public extension View {
                 secondaryButton: secondaryButton
             )
         }
+    }
+
+    func padding(
+        _ top: CGFloat,
+        _ leading: CGFloat,
+        _ bottom: CGFloat,
+        _ trailing: CGFloat
+    ) -> some View {
+        self.padding(EdgeInsets(top: top, leading: leading, bottom: bottom, trailing: trailing))
     }
 }
