@@ -10,7 +10,7 @@ import Combine
 import CoreInterface
 
 enum FirebaseAuthService {
-    static func signIn(email: String, password: String) -> AnyPublisher<CoreInterface.User, Error> {
+    static func signIn(email: String, password: String) -> AnyPublisher<AppUser, Error> {
         Future { promise in
             Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
                 if let user = authResult?.user.toUser {
@@ -23,7 +23,7 @@ enum FirebaseAuthService {
         .eraseToAnyPublisher()
     }
     
-    static func signUp(email: String, password: String) -> AnyPublisher<CoreInterface.User, Error> {
+    static func signUp(email: String, password: String) -> AnyPublisher<AppUser, Error> {
         Future { promise in
             Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                 if let user = authResult?.user.toUser {
@@ -48,13 +48,13 @@ enum FirebaseAuthService {
         .eraseToAnyPublisher()
     }
     
-    static func currentUser() -> CoreInterface.User? {
+    static func currentUser() -> AppUser? {
         return Auth.auth().currentUser?.toUser
     }
 }
 
 extension FirebaseAuth.User {
-    var toUser: CoreInterface.User {
-        CoreInterface.User(uid: self.uid, email: self.email ?? String())
+    var toUser: AppUser {
+        AppUser(uid: self.uid, email: self.email ?? String())
     }
 }

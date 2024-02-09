@@ -11,7 +11,7 @@ import CoreInterface
 public protocol RegisterViewModeling: ObservableObject {
     typealias Action = () -> Void
 
-    var user: User? { get }
+    var user: AppUser? { get }
     var error: CustomError? { get set }
     var tryAgainAction: Action? { get set }
 
@@ -22,7 +22,7 @@ public protocol RegisterViewModeling: ObservableObject {
 final class RegisterViewModel {
     typealias Dependencies = HasAuthentication & HasAnalytics
 
-    @Published var user: User?
+    @Published var user: AppUser?
     @Published var error: CustomError?
     @Published var tryAgainAction: Action?
 

@@ -13,9 +13,9 @@ public struct NavigationHubView: View {
     public init() {
         UITabBar.appearance().isHidden = true
     }
-    
-    @State var currentTab: Tab = .userProfile
-    
+
+    @State var currentTab: Tab = .profilesList
+
     public var body: some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $currentTab) {
@@ -23,21 +23,23 @@ public struct NavigationHubView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundImage()
                     .tag(Tab.configurations)
-                
+
                 Text("Screen2")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundImage()
                     .tag(Tab.likes)
-                
-                ProfileView()
-                .tag(Tab.profilesList)
-                
+
+                Text("Screen3")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .backgroundImage()
+                    .tag(Tab.profilesList)
+
                 Text("Screen4")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundImage()
                     .tag(Tab.matches)
-                
-                ProfileView()
+
+                ProfileFactory.make()
                     .tag(Tab.userProfile)
             }
             VStack {
@@ -74,11 +76,11 @@ public struct NavigationHubView: View {
         }
         .edgesIgnoringSafeArea(.bottom)
     }
-    
+
     func tabOpacity(_ currentTab: Tab, _ tab: Tab) -> Double {
         currentTab == tab ? 1 : 0.6
     }
-    
+
     func tabColors(_ currentTab: Tab, _ tab: Tab) -> [Color] {
         [
             .appPurple.opacity(tabOpacity(currentTab, tab)),

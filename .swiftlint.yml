@@ -3,6 +3,7 @@ disabled_rules:
   - identifier_name
   - line_length
   - trailing_whitespace
+  - switch_case_alignment
 
 analyzer_rules:
   - explicit_self

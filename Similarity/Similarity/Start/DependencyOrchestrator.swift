@@ -12,5 +12,6 @@ struct DependencyOrchestrator {
     static func start() {
         @Provider var auth: Authenticating = AuthRepository.shared
         @Provider var analytics: AnalyticsProtocol = AnalyticsRepository.shared
+        @Provider var profiling: Profiling = ProfileRepository.shared
     }
 }

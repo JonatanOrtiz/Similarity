@@ -7,11 +7,78 @@
 
 import SwiftUI
 import UI
+import CoreInterface
 
-public struct ProfileView: View {
-    public init() {}
-
+public struct ProfileView<ViewModeling>: View where ViewModeling: ProfileViewModeling {
+    @StateObject var viewModel: ViewModeling
     @State private var selectedImageIndex = 0
+
+    let mockProfile = AppProfile(
+        uid: "hgFDA4A2YMRoFHNuSZvX1VtRgO43",
+        email: "jonataneduard@gmail.com",
+        base: AppProfile.Base(
+            name: "John Doe",
+            job: "Software Developer",
+            age: "29",
+            bornGender: "Male"
+        ),
+        details: AppProfile.Details(
+            graduation: "BSc Computer Science",
+            height: 1.75,
+            languages: ["English", "Spanish"],
+            sign: "Aquarius",
+            kids: "None",
+            drinks: "Socially",
+            smokes: "Never",
+            city: "San Francisco"
+        ),
+        attributes: AppProfile.Attributes(
+            musicGenres: ["Rock", "Classical", "Jazz"],
+            watchingReading: ["Sci-Fi", "Fantasy", "Non-fiction"],
+            gameGenres: ["Strategy", "Puzzle", "Adventure"],
+            firstDate: "Coffee shop",
+            breadwinnerHomemaker: "Equal partnership",
+            cleaningRoutines: "Weekly",
+            hobbiesInterests: ["Hiking", "Coding", "Traveling"],
+            whenIGoOutILikeTo: ["Explore new restaurants", "Visit museums", "Go to concerts"],
+            foodCuisinePreferences: ["Italian", "Mexican", "Japanese"],
+            travel: ["Beach", "City", "Countryside"],
+            philosophyOfLife: "Live and let live",
+            petPreferences: ["Dogs", "Cats"],
+            urbanRural: ["Urban"],
+            socialMedia: "Minimal use",
+            lifestyle: "Active",
+            religion: "Agnostic",
+            socialPreferences: ["Small gatherings", "One-on-one"],
+            familyValues: ["Close-knit"],
+            sexualOrientation: ["Straight"],
+            genderIdentity: "Cisgender",
+            politicalPositioning: "Moderate",
+            bodyType: ["Athletic"],
+            skinColor: "Medium",
+            mentalHealthDisorder: [],
+            healthProblems: [],
+            clothingStyle: ["Casual", "Smart casual"],
+            communicationStyle: ["Open", "Honest"],
+            financialManagement: ["Saver", "Investor"],
+            lifeGoals: ["Career success", "Travel"],
+            environmentalConcerns: ["Recycling", "Conservation"],
+            humorStyle: ["Sarcastic", "Dry"],
+            socializingPreferences: ["Bars", "Home gatherings"],
+            futureFamilyPlans: "Open to possibilities",
+            personalityTraits: ["Thoughtful", "Analytical"],
+            conflictResolutionStyle: ["Discussion", "Compromise"],
+            privacyIndependence: ["Valued", "Respected"]
+        ),
+        imageUrls: [
+            "https://example.com/image1.jpg",
+            "https://example.com/image2.jpg",
+            "https://example.com/image3.jpg",
+            "https://example.com/image4.jpg",
+            "https://example.com/image5.jpg",
+            "https://example.com/image6.jpg"
+        ]
+    )
 
     @State var chips = [
         ChipData(backgroundColor: .appBlue, icon: .suitcase, text: "Jobription"),
@@ -48,7 +115,20 @@ public struct ProfileView: View {
                 UIScrollView.appearance().bounces = false
             }
         }
+        .onAppear {
+            viewModel.fetchProfile()
+        }
         .backgroundImage()
+        .errorBottomSheet(
+            customError: $viewModel.error,
+            primaryButton: .init(title: Strings.Common.ok) {
+                viewModel.error = nil
+            },
+            secondaryButton: .init(title: Strings.Common.tryAgain) {
+                viewModel.error = nil
+                viewModel.tryAgainAction?()
+            }
+        )
     }
 }
 
@@ -109,7 +189,7 @@ extension ProfileView {
 
     var ProfileDataView: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Natalie, 23")
+            Text("\(viewModel.profile?.base.name ?? "Error"), \(viewModel.profile?.base.age ?? "Error")")
                 .secondaryTitleBold(.white)
             HStack {
                 Image.assetIcon(.pin)
@@ -190,7 +270,8 @@ extension ProfileView {
 // MARK: - Previews
 struct ProfileContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        PreviewDependencyOrchestrator.start()
+        return ProfileView(viewModel: ProfileViewModel(dependencies: DependencyContainer()))
             .environment(\.locale, .init(identifier: "pt-BR"))
     }
 }

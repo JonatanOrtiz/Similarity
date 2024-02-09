@@ -12,7 +12,7 @@ import GoogleSignIn
 import FirebaseAuth
 
 enum GoogleAuthService {
-    static func signIn() -> AnyPublisher<CoreInterface.User, Error> {
+    static func signIn() -> AnyPublisher<AppUser, Error> {
         Future { promise in
             guard let clientID = FirebaseApp.app()?.options.clientID else {
                 promise(.failure(CustomError(title: Strings.GenericError.title, message: Strings.GoogleSignInError.clientID)))

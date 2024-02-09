@@ -1,2 +1,11 @@
+//MARK: - Common
+"common.ok" = "Ok";
+"common.tryAgain" = "Try Again";
+"common.genericErrorTitle" = "Error";
+
+//MARK: - Profile
 "profile.aboutMe" = "About me";
 "profile.MyDetails" = "My details";
+
+//MARK: - ProfileError
+"profileError.getUserId" = "Error when trying to access logged in user data.";

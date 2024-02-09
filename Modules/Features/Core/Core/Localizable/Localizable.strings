@@ -6,3 +6,7 @@
 "googleSignInError.presentingViewController" = "Error presenting alert";
 "googleSignInError.token" = "Error on user Token";
 "googleSignInError.createUser" = "Error creating the user";
+
+// MARK: - ProfileError
+"profileError.saveProfile.title" = "Save Profile Error";
+"profileError.getProfile" = "Profile object is nil";
