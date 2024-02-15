@@ -31,37 +31,50 @@ public struct AppProfile: Codable {
 
     public struct Base: Codable {
         public let name: String
-        public let job: String
         public let age: String
         public let bornGender: String
 
-        public init(name: String, job: String, age: String, bornGender: String) {
+        public init(name: String, age: String, bornGender: String) {
             self.name = name
-            self.job = job
             self.age = age
             self.bornGender = bornGender
         }
     }
 
     public struct Details: Codable {
+        public let aboutMe: String
+        public let job: String
         public let graduation: String
-        public let height: Double
-        public let languages: [String]
+        public let city: String
         public let sign: String
         public let kids: String
         public let drinks: String
         public let smokes: String
-        public let city: String
+        public let height: String
+        public let languages: [String]
 
-        public init(graduation: String, height: Double, languages: [String], sign: String, kids: String, drinks: String, smokes: String, city: String) {
+        public init(
+            aboutMe: String,
+            job: String,
+            graduation: String,
+            city: String,
+            sign: String,
+            kids: String,
+            drinks: String,
+            smokes: String,
+            height: String,
+            languages: [String]
+        ) {
+            self.aboutMe = aboutMe
+            self.job = job
             self.graduation = graduation
-            self.height = height
-            self.languages = languages
+            self.city = city
             self.sign = sign
             self.kids = kids
             self.drinks = drinks
             self.smokes = smokes
-            self.city = city
+            self.height = height
+            self.languages = languages
         }
     }
 

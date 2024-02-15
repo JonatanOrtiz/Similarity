@@ -10,6 +10,7 @@ import CoreInterface
 
 enum PreviewDependencyOrchestrator {
     static func start() {
+        @Provider var auth: Authenticating = AuthenticationMock<Any>()
         @Provider var profiling: Profiling = ProfilingMock()
         @Provider var analytics: AnalyticsProtocol = AnalyticsMock.fixture()
     }

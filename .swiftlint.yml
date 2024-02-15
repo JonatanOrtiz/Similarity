@@ -4,6 +4,8 @@ disabled_rules:
   - line_length
   - trailing_whitespace
   - switch_case_alignment
+  - closure_body_length
+  - type_body_length
 
 analyzer_rules:
   - explicit_self
@@ -13,7 +15,6 @@ analyzer_rules:
 opt_in_rules:
   - anyobject_protocol
   - array_init
-  - closure_body_length
   - closure_end_indentation
   - closure_spacing
   - collection_alignment

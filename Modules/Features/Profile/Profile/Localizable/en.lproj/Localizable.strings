@@ -5,7 +5,44 @@
 
 //MARK: - Profile
 "profile.aboutMe" = "About me";
-"profile.MyDetails" = "My details";
+"profile.myDetails" = "My details";
+"profile.languages" = "Languages";
+"profile.musicGenres" = "Music Genres";
+"profile.watchingReading" = "Watching/Reading Genres";
+"profile.gameGenres" = "Game Genres";
+"profile.firstDate" = "First Date";
+"profile.breadwinnerHomemaker" = "In a relationship";
+"profile.cleaningRoutines" = "Cleaning Routines";
+"profile.hobbiesInterests" = "Hobbies and Interests";
+"profile.whenIGoOutILikeTo" = "When I Go Out I Like To";
+"profile.foodCuisinePreferences" = "Food and Cuisine Preferences";
+"profile.travel" = "Travel";
+"profile.philosophyOfLife" = "Philosophy Of Life";
+"profile.petPreferences" = "Pet Preferences";
+"profile.urbanRural" = "Urban or Rural Living Preference";
+"profile.socialMedia" = "Social Media";
+"profile.lifestyle" = "Lifestyle";
+"profile.religion" = "Religion";
+"profile.socialPreferences" = "Social Preferences";
+"profile.familyValues" = "Family Values";
+"profile.sexualOrientation" = "Sexual Orientation";
+"profile.genderIdentity" = "Gender Identity";
+"profile.politicalPositioning" = "Political Positioning";
+"profile.bodyType" = "My body type";
+"profile.skinColor" = "Skin Color";
+"profile.mentalHealthDisorder" = "Mental Health Disorder";
+"profile.healthProblems" = "Health Problems";
+"profile.clothingStyle" = "Clothing Style";
+"profile.communicationStyle" = "Communication Style";
+"profile.financialManagement" = "Financial Management";
+"profile.lifeGoals" = "Life Goals";
+"profile.environmentalConcerns" = "Environmental Concerns";
+"profile.humorStyle" = "Humor Style";
+"profile.socializingPreferences" = "Socializing Preferences";
+"profile.futureFamilyPlans" = "Future Family Plans";
+"profile.personalityTraits" = "Personality Traits";
+"profile.conflictResolutionStyle" = "Conflict Resolution Style";
+"profile.privacyIndependence" = "Privacy and Independence";
 
 //MARK: - ProfileError
 "profileError.getUserId" = "Error when trying to access logged in user data.";
