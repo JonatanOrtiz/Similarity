@@ -19,8 +19,8 @@ public struct ProfileView<ViewModeling>: View where ViewModeling: ProfileViewMod
         uid: "uniqueUserID123",
         email: "user@example.com",
         base: AppProfile.Base(
-            name: "Alex Doe",
-            age: "30",
+            name: "Natalie",
+            age: "23",
             bornGender: "Non-binary"
         ),
         details: AppProfile.Details(
@@ -82,7 +82,6 @@ public struct ProfileView<ViewModeling>: View where ViewModeling: ProfileViewMod
             "https://example.com/image6.jpg"
         ]
     )
-
 
     let imageUrls: [AssetImage] = [.someImageExample1, .someImageExample2, .someImageExample3, .someImageExample4, .someImageExample5, .someImageExample6]
 
@@ -263,7 +262,7 @@ extension ProfileView {
 
     var ProfileDataView: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("\(viewModel.profile?.base.name ?? "Error"), \(viewModel.profile?.base.age ?? "Error")")
+            Text("\(mockProfile.base.name), \(mockProfile.base.age)")
                 .secondaryTitleBold(.white)
             HStack {
                 Image.assetIcon(.pin)
