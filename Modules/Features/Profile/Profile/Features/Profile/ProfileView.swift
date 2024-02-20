@@ -178,7 +178,7 @@ extension ProfileView {
             Spacer()
             Text("Similarity")
                 .font(.system(size: 24, weight: .bold, design: .rounded))
-                .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.appBlue, .appPurple]), startPoint: .leading, endPoint: .trailing))
+                .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.appPurple, .appBlue]), startPoint: .leading, endPoint: .trailing))
             Spacer()
             Image(systemName: "equal.circle")
                 .font(.system(size: 20, weight: .bold))
