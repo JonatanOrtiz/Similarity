@@ -11,20 +11,21 @@ import CoreInterface
 public protocol ProfileViewModeling: ObservableObject {
     typealias Action = () -> Void
 
-    var profile: AppProfile? { get set }
-    var error: CustomError? { get set }
+    var profile: AppProfile? { get }
+    var error: CustomError? { get }
     var tryAgainAction: Action? { get set }
+    var isLoading: Bool { get }
 
     func fetchProfile()
-    func saveProfile(profile: AppProfile)
 }
 
 final class ProfileViewModel: ProfileViewModeling {
-    typealias Dependencies = HasAuthentication & HasProfile & HasAnalytics
+    typealias Dependencies = HasAuthentication & HasDataManagement & HasAnalytics
 
     @Published var profile: AppProfile?
     @Published var error: CustomError?
     @Published var tryAgainAction: Action?
+    @Published var isLoading = true
 
     private var cancellables = Set<AnyCancellable>()
     private let dependencies: Dependencies
@@ -36,19 +37,32 @@ final class ProfileViewModel: ProfileViewModeling {
 
 extension ProfileViewModel {
     func fetchProfile() {
+        isLoading = true
+        error = nil
+
         guard let userId = dependencies.auth.user?.uid else {
-            return handleError(CustomError(
+            handleError(CustomError(
                 title: Strings.Common.genericErrorTitle,
                 message: Strings.ProfileError.getUserId
             )) { [weak self] in
                 self?.fetchProfile()
             }
+            isLoading = false
+            return
         }
 
-        dependencies.profiling.fetchProfile(uid: userId)
+        let databaseConfiguration = DocumentDatabaseConfiguration(
+            collectionPath: .profiles,
+            documentId: userId,
+            data: nil,
+            fieldsToUpdate: nil
+        )
+
+        dependencies.dataManagement.execute(operation: .fetch, configuration: databaseConfiguration)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
                     switch completion {
                         case .failure(let error):
                             self?.handleError(error) {
@@ -60,27 +74,6 @@ extension ProfileViewModel {
                 },
                 receiveValue: { [weak self] profile in
                     self?.profile = profile
-                }
-            )
-            .store(in: &cancellables)
-    }
-
-    func saveProfile(profile: AppProfile) {
-        dependencies.profiling.saveProfile(profile: profile)
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    switch completion {
-                        case .failure(let error):
-                            self?.handleError(error) {
-                                self?.saveProfile(profile: profile)
-                            }
-                        case .finished: 
-                            break
-                    }
-                },
-                receiveValue: { _ in
-                    // Profile saved successfully
                 }
             )
             .store(in: &cancellables)

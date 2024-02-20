@@ -1,12 +1,21 @@
 // MARK: - Generic Error
 "genericError.title" = "Error";
 
-// MARK: - GoogleSignInError
+// MARK: - GoogleSignIn Error
 "googleSignInError.clientID" = "Error on clientID";
 "googleSignInError.presentingViewController" = "Error presenting alert";
 "googleSignInError.token" = "Error on user Token";
 "googleSignInError.createUser" = "Error creating the user";
 
-// MARK: - ProfileError
-"profileError.saveProfile.title" = "Save Profile Error";
-"profileError.getProfile" = "Profile object is nil";
+// MARK: - Data Management Error
+"dataManagementError.unsupportedConfiguration" = "Unsupported configuration type";
+
+// MARK: - FirestoreData Error
+"firestoreDataError.requiredDocumentID" = "Document ID is required for fetch operation";
+"firestoreDataError.DocumentNotFound" = "Document not found";
+"firestoreDataError.castingGenericT" = "Type cast to %@ failed after save.";
+"firestoreDataError.requiredData" = "Data is required for save operation";
+"firestoreDataError.requiredDocumentIDAndFields" = "Document ID and fields are required for update operation";
+"firestoreDataError.DocumentNotFoundUpdate" = "Document not found after update";
+"firestoreDataError.requiredDocumentIDForDelete" = "Document ID is required for delete operation";
+"firestoreDataError.DeleteDoesNotReturnData" = "Delete operation does not return data";

@@ -11,7 +11,7 @@ public enum ProfileFactory {
     public static func make() -> some View {
         let dependencyContainer = DependencyContainer()
         let viewModel = ProfileViewModel(dependencies: dependencyContainer)
-        let contentView = ProfileView(viewModel: viewModel)
+        let contentView = ProfileLoadingView(viewModel: viewModel)
 
         return contentView
     }

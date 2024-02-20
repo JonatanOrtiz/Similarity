@@ -8,10 +8,10 @@
 import Core
 import CoreInterface
 
-struct DependencyOrchestrator {
+enum DependencyOrchestrator {
     static func start() {
         @Provider var auth: Authenticating = AuthRepository.shared
         @Provider var analytics: AnalyticsProtocol = AnalyticsRepository.shared
-        @Provider var profiling: Profiling = ProfileRepository.shared
+        @Provider var dataManagement: DataManaging = DataManagementRepository.shared
     }
 }

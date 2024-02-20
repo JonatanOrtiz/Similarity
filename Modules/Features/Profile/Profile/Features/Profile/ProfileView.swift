@@ -7,85 +7,61 @@
 
 import SwiftUI
 import UI
-import CoreInterface
 
-public struct ProfileView<ViewModeling>: View where ViewModeling: ProfileViewModeling {
+public struct ProfileLoadingView<ViewModeling>: View where ViewModeling: ProfileViewModeling {
+    @StateObject var viewModel: ViewModeling
+
+    public var body: some View {
+        Group {
+            if viewModel.isLoading {
+                loadingView()
+            } else if let profile = viewModel.profile {
+                ProfileView(profile: profile)
+            } else if viewModel.error != nil {
+                errorView()
+            }
+        }
+        .onAppear {
+            if viewModel.isLoading {
+                viewModel.fetchProfile()
+            }
+        }
+        .backgroundImage()
+    }
+    
+    // create later
+    private func loadingView() -> some View {
+        VStack {
+            ProgressView("Loading...")
+        }
+    }
+
+    // create later
+    private func errorView() -> some View {
+        VStack {
+            Text("An error occurred while fetching the profile.")
+                .foregroundColor(.red)
+            Button("Try Again") {
+                viewModel.fetchProfile()
+            }
+        }
+    }
+}
+
+// MARK: - ProfileView
+struct ProfileView: View {
     typealias Localizable = Strings.Profile
 
-    @StateObject var viewModel: ViewModeling
+    @State private var profile: AppProfile
     @State private var selectedImageIndex = 0
-
-    let mockProfile = AppProfile(
-        uid: "uniqueUserID123",
-        email: "user@example.com",
-        base: AppProfile.Base(
-            name: "Natalie",
-            age: "23",
-            bornGender: "Non-binary"
-        ),
-        details: AppProfile.Details(
-            aboutMe: "I'm a lover of books and endless conversations. Nature and city life both have their charms that captivate me.",
-            job: "Graphic Designer",
-            graduation: "MFA in Design",
-            city: "New York",
-            sign: "Gemini",
-            kids: "Open to discussion",
-            drinks: "Socially",
-            smokes: "Never",
-            height: "175 cm",
-            languages: ["English", "French"]
-        ),
-        attributes: AppProfile.Attributes(
-            musicGenres: ["Jazz", "Electronic", "Indie Rock"],
-            watchingReading: ["Comedy", "Drama", "Science Fiction"],
-            gameGenres: ["Puzzle", "Strategy", "Adventure"],
-            firstDate: "Whoever invites pays the bill",
-            breadwinnerHomemaker: "The couple shares all obligations",
-            cleaningRoutines: "Weekly Cleaning",
-            hobbiesInterests: ["Reading", "Photography", "Traveling"],
-            whenIGoOutILikeTo: ["Visit Art Galleries or Museums", "Enjoy Fine Dining at Restaurants", "Take Scenic Walks or Hikes"],
-            foodCuisinePreferences: ["Italian Cuisine", "Japanese Cuisine", "Vegetarian Diet"],
-            travel: ["Cultural and Historical Tours", "Adventure and Outdoor Activities", "City Breaks"],
-            philosophyOfLife: "Minimalist",
-            petPreferences: ["Cats", "Dogs"],
-            urbanRural: ["Urban"],
-            socialMedia: "Moderate User",
-            lifestyle: "Night Owl",
-            religion: "Agnosticism",
-            socialPreferences: ["Small gatherings", "One-on-one"],
-            familyValues: ["Progressive Family Ideals"],
-            sexualOrientation: ["Bisexual"],
-            genderIdentity: "Non-binary",
-            politicalPositioning: "Progressive",
-            bodyType: ["Athletic", "Slim or slender"],
-            skinColor: "Medium",
-            mentalHealthDisorder: ["Anxiety disorders"],
-            healthProblems: ["Asthma"],
-            clothingStyle: ["Casual", "Vintage or Retro"],
-            communicationStyle: ["Text", "In-person"],
-            financialManagement: ["Saver", "Budgeter"],
-            lifeGoals: ["Career growth", "Personal milestones"],
-            environmentalConcerns: ["Recycling proponent", "Green living enthusiast"],
-            humorStyle: ["Dry Humor / Deadpan", "Sarcastic Humor"],
-            socializingPreferences: ["Small gatherings", "Online communities"],
-            futureFamilyPlans: "Wants children",
-            personalityTraits: ["Creative", "Analytical", "Compassionate"],
-            conflictResolutionStyle: ["Communicative", "Compromising"],
-            privacyIndependence: ["Highly independent", "Private space lover"]
-        ),
-        imageUrls: [
-            "https://example.com/image1.jpg",
-            "https://example.com/image2.jpg",
-            "https://example.com/image3.jpg",
-            "https://example.com/image4.jpg",
-            "https://example.com/image5.jpg",
-            "https://example.com/image6.jpg"
-        ]
-    )
 
     let imageUrls: [AssetImage] = [.someImageExample1, .someImageExample2, .someImageExample3, .someImageExample4, .someImageExample5, .someImageExample6]
 
-    public var body: some View {
+    init(profile: AppProfile) {
+        self.profile = profile
+    }
+
+    var body: some View {
         VStack {
             TopItems
             ScrollView(showsIndicators: false) {
@@ -97,90 +73,90 @@ public struct ProfileView<ViewModeling>: View where ViewModeling: ProfileViewMod
                     makeChips(
                         chips:
                             [
-                                ChipData(backgroundColor: .appBlue, text: mockProfile.details.job, sfIcon: .suitcase),
-                                ChipData(backgroundColor: .appBlue, text: mockProfile.details.graduation, sfIcon: .graduationcap),
-                                ChipData(backgroundColor: .appBlue, text: mockProfile.details.city, sfIcon: .map),
-                                ChipData(backgroundColor: .appBlue, text: mockProfile.details.sign, sfIcon: .sparkles),
-                                ChipData(backgroundColor: .appBlue, text: mockProfile.details.kids, icon: .baby),
-                                ChipData(backgroundColor: .appBlue, text: mockProfile.details.drinks, sfIcon: .wineglass),
-                                ChipData(backgroundColor: .appBlue, text: mockProfile.details.smokes, icon: .cigar),
-                                ChipData(backgroundColor: .appBlue, text: mockProfile.details.height, icon: .ruler)
+                                ChipData(backgroundColor: .appBlue, text: profile.details.job, sfIcon: .suitcase),
+                                ChipData(backgroundColor: .appBlue, text: profile.details.graduation, sfIcon: .graduationcap),
+                                ChipData(backgroundColor: .appBlue, text: profile.details.city, sfIcon: .map),
+                                ChipData(backgroundColor: .appBlue, text: profile.details.sign, sfIcon: .sparkles),
+                                ChipData(backgroundColor: .appBlue, text: profile.details.kids, icon: .baby),
+                                ChipData(backgroundColor: .appBlue, text: profile.details.drinks, sfIcon: .wineglass),
+                                ChipData(backgroundColor: .appBlue, text: profile.details.smokes, icon: .cigar),
+                                ChipData(backgroundColor: .appBlue, text: profile.details.height, icon: .ruler)
                             ]
                     )
                     sectionTitle(title: Localizable.languages)
-                    makeChips(chips: mockProfile.details.languages.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.details.languages.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.musicGenres)
-                    makeChips(chips: mockProfile.attributes.musicGenres.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.musicGenres.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.watchingReading)
-                    makeChips(chips: mockProfile.attributes.watchingReading.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.watchingReading.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.gameGenres)
-                    makeChips(chips: mockProfile.attributes.gameGenres.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.gameGenres.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.firstDate)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.firstDate) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.firstDate) ])
                     sectionTitle(title: Localizable.breadwinnerHomemaker)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.breadwinnerHomemaker) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.breadwinnerHomemaker) ])
                     sectionTitle(title: Localizable.cleaningRoutines)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.cleaningRoutines) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.cleaningRoutines) ])
                     sectionTitle(title: Localizable.hobbiesInterests)
-                    makeChips(chips: mockProfile.attributes.hobbiesInterests.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.hobbiesInterests.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.whenIGoOutILikeTo)
-                    makeChips(chips: mockProfile.attributes.whenIGoOutILikeTo.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.whenIGoOutILikeTo.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.foodCuisinePreferences)
-                    makeChips(chips: mockProfile.attributes.foodCuisinePreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.foodCuisinePreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.travel)
-                    makeChips(chips: mockProfile.attributes.travel.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.travel.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.philosophyOfLife)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.philosophyOfLife) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.philosophyOfLife) ])
                     sectionTitle(title: Localizable.petPreferences)
-                    makeChips(chips: mockProfile.attributes.petPreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.petPreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.urbanRural)
-                    makeChips(chips: mockProfile.attributes.urbanRural.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.urbanRural.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.socialMedia)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.socialMedia) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.socialMedia) ])
                     sectionTitle(title: Localizable.lifestyle)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.lifestyle) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.lifestyle) ])
                     sectionTitle(title: Localizable.religion)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.religion) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.religion) ])
                     sectionTitle(title: Localizable.socialPreferences)
-                    makeChips(chips: mockProfile.attributes.socialPreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.socialPreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.familyValues)
-                    makeChips(chips: mockProfile.attributes.familyValues.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.familyValues.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.sexualOrientation)
-                    makeChips(chips: mockProfile.attributes.sexualOrientation.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.sexualOrientation.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.genderIdentity)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.genderIdentity) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.genderIdentity) ])
                     sectionTitle(title: Localizable.politicalPositioning)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.politicalPositioning) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.politicalPositioning) ])
                     sectionTitle(title: Localizable.bodyType)
-                    makeChips(chips: mockProfile.attributes.bodyType.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.bodyType.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.skinColor)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.skinColor) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.skinColor) ])
                     sectionTitle(title: Localizable.mentalHealthDisorder)
-                    makeChips(chips: mockProfile.attributes.mentalHealthDisorder.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.mentalHealthDisorder.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.healthProblems)
-                    makeChips(chips: mockProfile.attributes.healthProblems.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.healthProblems.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.clothingStyle)
-                    makeChips(chips: mockProfile.attributes.clothingStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.clothingStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.communicationStyle)
-                    makeChips(chips: mockProfile.attributes.communicationStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.communicationStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.financialManagement)
-                    makeChips(chips: mockProfile.attributes.financialManagement.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.financialManagement.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.lifeGoals)
-                    makeChips(chips: mockProfile.attributes.lifeGoals.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.lifeGoals.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.environmentalConcerns)
-                    makeChips(chips: mockProfile.attributes.environmentalConcerns.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.environmentalConcerns.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.humorStyle)
-                    makeChips(chips: mockProfile.attributes.humorStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.humorStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.socializingPreferences)
-                    makeChips(chips: mockProfile.attributes.socializingPreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.socializingPreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.futureFamilyPlans)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: mockProfile.attributes.futureFamilyPlans) ])
+                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.futureFamilyPlans) ])
                     sectionTitle(title: Localizable.personalityTraits)
-                    makeChips(chips: mockProfile.attributes.personalityTraits.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.personalityTraits.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.conflictResolutionStyle)
-                    makeChips(chips: mockProfile.attributes.conflictResolutionStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.conflictResolutionStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
                     sectionTitle(title: Localizable.privacyIndependence)
-                    makeChips(chips: mockProfile.attributes.privacyIndependence.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: profile.attributes.privacyIndependence.map { ChipData(backgroundColor: .appPurple, text: $0) })
                 }
                 .padding(.bottom, 60)
             }
@@ -188,20 +164,6 @@ public struct ProfileView<ViewModeling>: View where ViewModeling: ProfileViewMod
                 UIScrollView.appearance().bounces = false
             }
         }
-        .onAppear {
-            //            viewModel.fetchProfile()
-        }
-        .backgroundImage()
-        .errorBottomSheet(
-            customError: $viewModel.error,
-            primaryButton: .init(title: Strings.Common.ok) {
-                viewModel.error = nil
-            },
-            secondaryButton: .init(title: Strings.Common.tryAgain) {
-                viewModel.error = nil
-                viewModel.tryAgainAction?()
-            }
-        )
     }
 }
 
@@ -262,7 +224,7 @@ extension ProfileView {
 
     var ProfileDataView: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("\(mockProfile.base.name), \(mockProfile.base.age)")
+            Text("\(profile.base.name), \(profile.base.age)")
                 .secondaryTitleBold(.white)
             HStack {
                 Image.assetIcon(.pin)
@@ -280,7 +242,7 @@ extension ProfileView {
 
     var AboutMe: some View {
         VStack(alignment: .leading, spacing: 15) {
-            Text(mockProfile.details.aboutMe)
+            Text(profile.details.aboutMe)
                 .bodyBold(.white)
                 .lineSpacing(7)
                 .fixedSize(horizontal: false, vertical: true)
@@ -344,7 +306,7 @@ extension ProfileView {
 struct ProfileContentView_Previews: PreviewProvider {
     static var previews: some View {
         PreviewDependencyOrchestrator.start()
-        return ProfileView(viewModel: ProfileViewModel(dependencies: DependencyContainer()))
+        return ProfileLoadingView(viewModel: ProfileViewModel(dependencies: DependencyContainer()))
             .environment(\.locale, .init(identifier: "pt-BR"))
     }
 }

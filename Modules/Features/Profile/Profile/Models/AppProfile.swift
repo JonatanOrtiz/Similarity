@@ -1,8 +1,8 @@
 //
-//  Profile.swift
-//  CoreInterface
+//  AppProfile.swift
+//  Profile
 //
-//  Created by Jonatan Ortiz on 08/02/24.
+//  Created by Jonatan Ortiz on 19/02/24.
 //
 
 public struct AppProfile: Codable {
