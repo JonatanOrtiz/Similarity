@@ -92,6 +92,7 @@ public extension View {
                 Image.assetImage(image ?? .backgroundImage)
                     .resizable()
                     .ignoresSafeArea()
+                    .aspectRatio(contentMode: .fill)
             )
     }
     

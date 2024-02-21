@@ -43,6 +43,7 @@
 "profile.personalityTraits" = "Personality Traits";
 "profile.conflictResolutionStyle" = "Conflict Resolution Style";
 "profile.privacyIndependence" = "Privacy and Independence";
+"profile.loading" = "Loading profile...";
 
 //MARK: - ProfileError
 "profileError.getUserId" = "Error when trying to access logged in user data.";

@@ -43,8 +43,6 @@ public struct AppProfile: Codable {
 
     public struct Details: Codable {
         public let aboutMe: String
-        public let job: String
-        public let graduation: String
         public let city: String
         public let sign: String
         public let kids: String
@@ -52,22 +50,22 @@ public struct AppProfile: Codable {
         public let smokes: String
         public let height: String
         public let languages: [String]
+        public let job: String?
+        public let graduation: String?
 
         public init(
             aboutMe: String,
-            job: String,
-            graduation: String,
             city: String,
             sign: String,
             kids: String,
             drinks: String,
             smokes: String,
             height: String,
-            languages: [String]
+            languages: [String],
+            job: String? = nil,
+            graduation: String? = nil
         ) {
             self.aboutMe = aboutMe
-            self.job = job
-            self.graduation = graduation
             self.city = city
             self.sign = sign
             self.kids = kids
@@ -75,6 +73,8 @@ public struct AppProfile: Codable {
             self.smokes = smokes
             self.height = height
             self.languages = languages
+            self.job = job
+            self.graduation = graduation
         }
     }
 

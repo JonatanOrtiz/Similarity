@@ -9,12 +9,14 @@ import SwiftUI
 import UI
 
 public struct ProfileLoadingView<ViewModeling>: View where ViewModeling: ProfileViewModeling {
+    typealias Localizable = Strings.Profile
+
     @StateObject var viewModel: ViewModeling
 
     public var body: some View {
         Group {
             if viewModel.isLoading {
-                loadingView()
+                LoadingView(text: Localizable.loading)
             } else if let profile = viewModel.profile {
                 ProfileView(profile: profile)
             } else if viewModel.error != nil {
@@ -28,23 +30,20 @@ public struct ProfileLoadingView<ViewModeling>: View where ViewModeling: Profile
         }
         .backgroundImage()
     }
-    
-    // create later
-    private func loadingView() -> some View {
-        VStack {
-            ProgressView("Loading...")
-        }
-    }
 
     // create later
     private func errorView() -> some View {
         VStack {
+            Spacer()
             Text("An error occurred while fetching the profile.")
                 .foregroundColor(.red)
+            Spacer()
             Button("Try Again") {
                 viewModel.fetchProfile()
             }
+            Spacer()
         }
+        .backgroundImage()
     }
 }
 
@@ -52,8 +51,28 @@ public struct ProfileLoadingView<ViewModeling>: View where ViewModeling: Profile
 struct ProfileView: View {
     typealias Localizable = Strings.Profile
 
-    @State private var profile: AppProfile
     @State private var selectedImageIndex = 0
+    private let profile: AppProfile
+
+    private var detailsChips: [ChipData] {
+        var chips: [ChipData] = []
+        let nonOptionalDetailsChips = [
+            ChipData(backgroundColor: .appBlue, text: profile.details.city, sfIcon: .map),
+            ChipData(backgroundColor: .appBlue, text: profile.details.sign, sfIcon: .sparkles),
+            ChipData(backgroundColor: .appBlue, text: profile.details.kids, icon: .baby),
+            ChipData(backgroundColor: .appBlue, text: profile.details.drinks, sfIcon: .wineglass),
+            ChipData(backgroundColor: .appBlue, text: profile.details.smokes, icon: .cigar),
+            ChipData(backgroundColor: .appBlue, text: profile.details.height, icon: .ruler)
+        ]
+        if let job = profile.details.job {
+            chips.append(ChipData(backgroundColor: .appBlue, text: job, sfIcon: .suitcase))
+        }
+        if let graduation = profile.details.graduation {
+            chips.append(ChipData(backgroundColor: .appBlue, text: graduation, sfIcon: .graduationcap))
+        }
+        chips.append(contentsOf: nonOptionalDetailsChips)
+        return chips
+    }
 
     let imageUrls: [AssetImage] = [.someImageExample1, .someImageExample2, .someImageExample3, .someImageExample4, .someImageExample5, .someImageExample6]
 
@@ -70,93 +89,44 @@ struct ProfileView: View {
                     sectionTitle(title: Localizable.aboutMe)
                     AboutMe
                     sectionTitle(title: Localizable.myDetails)
-                    makeChips(
-                        chips:
-                            [
-                                ChipData(backgroundColor: .appBlue, text: profile.details.job, sfIcon: .suitcase),
-                                ChipData(backgroundColor: .appBlue, text: profile.details.graduation, sfIcon: .graduationcap),
-                                ChipData(backgroundColor: .appBlue, text: profile.details.city, sfIcon: .map),
-                                ChipData(backgroundColor: .appBlue, text: profile.details.sign, sfIcon: .sparkles),
-                                ChipData(backgroundColor: .appBlue, text: profile.details.kids, icon: .baby),
-                                ChipData(backgroundColor: .appBlue, text: profile.details.drinks, sfIcon: .wineglass),
-                                ChipData(backgroundColor: .appBlue, text: profile.details.smokes, icon: .cigar),
-                                ChipData(backgroundColor: .appBlue, text: profile.details.height, icon: .ruler)
-                            ]
-                    )
-                    sectionTitle(title: Localizable.languages)
-                    makeChips(chips: profile.details.languages.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.musicGenres)
-                    makeChips(chips: profile.attributes.musicGenres.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.watchingReading)
-                    makeChips(chips: profile.attributes.watchingReading.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.gameGenres)
-                    makeChips(chips: profile.attributes.gameGenres.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.firstDate)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.firstDate) ])
-                    sectionTitle(title: Localizable.breadwinnerHomemaker)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.breadwinnerHomemaker) ])
-                    sectionTitle(title: Localizable.cleaningRoutines)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.cleaningRoutines) ])
-                    sectionTitle(title: Localizable.hobbiesInterests)
-                    makeChips(chips: profile.attributes.hobbiesInterests.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.whenIGoOutILikeTo)
-                    makeChips(chips: profile.attributes.whenIGoOutILikeTo.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.foodCuisinePreferences)
-                    makeChips(chips: profile.attributes.foodCuisinePreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.travel)
-                    makeChips(chips: profile.attributes.travel.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.philosophyOfLife)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.philosophyOfLife) ])
-                    sectionTitle(title: Localizable.petPreferences)
-                    makeChips(chips: profile.attributes.petPreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.urbanRural)
-                    makeChips(chips: profile.attributes.urbanRural.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.socialMedia)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.socialMedia) ])
-                    sectionTitle(title: Localizable.lifestyle)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.lifestyle) ])
-                    sectionTitle(title: Localizable.religion)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.religion) ])
-                    sectionTitle(title: Localizable.socialPreferences)
-                    makeChips(chips: profile.attributes.socialPreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.familyValues)
-                    makeChips(chips: profile.attributes.familyValues.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.sexualOrientation)
-                    makeChips(chips: profile.attributes.sexualOrientation.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.genderIdentity)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.genderIdentity) ])
-                    sectionTitle(title: Localizable.politicalPositioning)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.politicalPositioning) ])
-                    sectionTitle(title: Localizable.bodyType)
-                    makeChips(chips: profile.attributes.bodyType.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.skinColor)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.skinColor) ])
-                    sectionTitle(title: Localizable.mentalHealthDisorder)
-                    makeChips(chips: profile.attributes.mentalHealthDisorder.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.healthProblems)
-                    makeChips(chips: profile.attributes.healthProblems.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.clothingStyle)
-                    makeChips(chips: profile.attributes.clothingStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.communicationStyle)
-                    makeChips(chips: profile.attributes.communicationStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.financialManagement)
-                    makeChips(chips: profile.attributes.financialManagement.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.lifeGoals)
-                    makeChips(chips: profile.attributes.lifeGoals.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.environmentalConcerns)
-                    makeChips(chips: profile.attributes.environmentalConcerns.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.humorStyle)
-                    makeChips(chips: profile.attributes.humorStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.socializingPreferences)
-                    makeChips(chips: profile.attributes.socializingPreferences.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.futureFamilyPlans)
-                    makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: profile.attributes.futureFamilyPlans) ])
-                    sectionTitle(title: Localizable.personalityTraits)
-                    makeChips(chips: profile.attributes.personalityTraits.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.conflictResolutionStyle)
-                    makeChips(chips: profile.attributes.conflictResolutionStyle.map { ChipData(backgroundColor: .appPurple, text: $0) })
-                    sectionTitle(title: Localizable.privacyIndependence)
-                    makeChips(chips: profile.attributes.privacyIndependence.map { ChipData(backgroundColor: .appPurple, text: $0) })
+                    makeChips(chips: detailsChips)
+                    makeSection(title: Localizable.languages, attributes: profile.details.languages)
+                    makeSection(title: Localizable.musicGenres, attributes: profile.attributes.musicGenres)
+                    makeSection(title: Localizable.watchingReading, attributes: profile.attributes.watchingReading)
+                    makeSection(title: Localizable.gameGenres, attributes: profile.attributes.gameGenres)
+                    makeSection(title: Localizable.firstDate, attribute: profile.attributes.firstDate)
+                    makeSection(title: Localizable.breadwinnerHomemaker, attribute: profile.attributes.breadwinnerHomemaker)
+                    makeSection(title: Localizable.cleaningRoutines, attribute: profile.attributes.cleaningRoutines)
+                    makeSection(title: Localizable.hobbiesInterests, attributes: profile.attributes.hobbiesInterests)
+                    makeSection(title: Localizable.whenIGoOutILikeTo, attributes: profile.attributes.whenIGoOutILikeTo)
+                    makeSection(title: Localizable.foodCuisinePreferences, attributes: profile.attributes.foodCuisinePreferences)
+                    makeSection(title: Localizable.travel, attributes: profile.attributes.travel)
+                    makeSection(title: Localizable.philosophyOfLife, attribute: profile.attributes.philosophyOfLife)
+                    makeSection(title: Localizable.petPreferences, attributes: profile.attributes.petPreferences)
+                    makeSection(title: Localizable.urbanRural, attributes: profile.attributes.urbanRural)
+                    makeSection(title: Localizable.socialMedia, attribute: profile.attributes.socialMedia)
+                    makeSection(title: Localizable.lifestyle, attribute: profile.attributes.lifestyle)
+                    makeSection(title: Localizable.religion, attribute: profile.attributes.religion)
+                    makeSection(title: Localizable.socialPreferences, attributes: profile.attributes.socialPreferences)
+                    makeSection(title: Localizable.familyValues, attributes: profile.attributes.familyValues)
+                    makeSection(title: Localizable.sexualOrientation, attributes: profile.attributes.sexualOrientation)
+                    makeSection(title: Localizable.genderIdentity, attribute: profile.attributes.genderIdentity)
+                    makeSection(title: Localizable.politicalPositioning, attribute: profile.attributes.politicalPositioning)
+                    makeSection(title: Localizable.bodyType, attributes: profile.attributes.bodyType)
+                    makeSection(title: Localizable.skinColor, attribute: profile.attributes.skinColor)
+                    makeSection(title: Localizable.mentalHealthDisorder, attributes: profile.attributes.mentalHealthDisorder)
+                    makeSection(title: Localizable.healthProblems, attributes: profile.attributes.healthProblems)
+                    makeSection(title: Localizable.clothingStyle, attributes: profile.attributes.clothingStyle)
+                    makeSection(title: Localizable.communicationStyle, attributes: profile.attributes.communicationStyle)
+                    makeSection(title: Localizable.financialManagement, attributes: profile.attributes.financialManagement)
+                    makeSection(title: Localizable.lifeGoals, attributes: profile.attributes.lifeGoals)
+                    makeSection(title: Localizable.environmentalConcerns, attributes: profile.attributes.environmentalConcerns)
+                    makeSection(title: Localizable.humorStyle, attributes: profile.attributes.humorStyle)
+                    makeSection(title: Localizable.socializingPreferences, attributes: profile.attributes.socializingPreferences)
+                    makeSection(title: Localizable.futureFamilyPlans, attribute: profile.attributes.futureFamilyPlans)
+                    makeSection(title: Localizable.personalityTraits, attributes: profile.attributes.personalityTraits)
+                    makeSection(title: Localizable.conflictResolutionStyle, attributes: profile.attributes.conflictResolutionStyle)
+                    makeSection(title: Localizable.privacyIndependence, attributes: profile.attributes.privacyIndependence)
                 }
                 .padding(.bottom, 60)
             }
@@ -189,27 +159,31 @@ extension ProfileView {
 
     var ImagesCarrousel: some View {
         TabView(selection: $selectedImageIndex) {
-            ForEach(0..<imageUrls.count, id: \.self) { index in
-                ImageContainerView(
-                    image: imageUrls[index],
-                    onTapLeft: {
-                        if selectedImageIndex > 0 {
-                            selectedImageIndex -= 1
-                        }
-                    },
-                    onTapRight: {
-                        if selectedImageIndex < imageUrls.count - 1 {
-                            selectedImageIndex += 1
-                        }
-                    })
-                .tag(index)
-                .overlay {
-                    LinearGradient(
-                        gradient: Gradient(colors: [.black, .black, .clear, .clear, .clear]),
-                        startPoint: .bottom,
-                        endPoint: .top
-                    )
-                    .opacity(0.5)
+            ForEach(0..<profile.imageUrls.count, id: \.self) { index in
+                AsyncImage(url: URL(string: profile.imageUrls[index])) { image in
+                    ImageContainerView(
+                        image: image,
+                        onTapLeft: {
+                            if selectedImageIndex > 0 {
+                                selectedImageIndex -= 1
+                            }
+                        },
+                        onTapRight: {
+                            if selectedImageIndex < imageUrls.count - 1 {
+                                selectedImageIndex += 1
+                            }
+                        })
+                    .tag(index)
+                    .overlay {
+                        LinearGradient(
+                            gradient: Gradient(colors: [.black, .black, .clear, .clear, .clear]),
+                            startPoint: .bottom,
+                            endPoint: .top
+                        )
+                        .opacity(0.5)
+                    }
+                } placeholder: {
+                    ProgressView()
                 }
             }
         }
@@ -255,13 +229,13 @@ extension ProfileView {
 // MARK: - Structs
 extension ProfileView {
     struct ImageContainerView: View {
-        let image: AssetImage
+        let image: Image
         var onTapLeft: () -> Void
         var onTapRight: () -> Void
 
         var body: some View {
             GeometryReader { geometry in
-                Image.assetImage(image)
+                image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .onTapGesture { location in
@@ -300,13 +274,103 @@ extension ProfileView {
         }
         .padding(0, 15, 0, 15)
     }
+
+    func makeSection(title: String, attribute: String? = nil, attributes: [String]? = nil) -> some View {
+        VStack(alignment: .leading) {
+            sectionTitle(title: title)
+            if let attribute {
+                makeChips(chips: [ ChipData(backgroundColor: .appBlue, text: attribute) ])
+            }
+            if let attributes {
+                makeChips(chips: attributes.map { ChipData(backgroundColor: .appPurple, text: $0) })
+            }
+        }
+    }
 }
 
-// MARK: - Previews
-struct ProfileContentView_Previews: PreviewProvider {
+ // MARK: - ProfileLoadingView Previews
+ struct ProfileLoadingView_Previews: PreviewProvider {
     static var previews: some View {
         PreviewDependencyOrchestrator.start()
         return ProfileLoadingView(viewModel: ProfileViewModel(dependencies: DependencyContainer()))
             .environment(\.locale, .init(identifier: "pt-BR"))
     }
+ }
+
+// MARK: - ProfileView Previews
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        PreviewDependencyOrchestrator.start()
+        return ProfileView(profile: mockProfile)
+            .backgroundImage()
+            .environment(\.locale, .init(identifier: "pt-BR"))
+    }
 }
+
+let mockProfile = AppProfile(
+    uid: "hgFDA4A2YMRoFHNuSZvX1VtRgO43",
+    email: "jonataneduard@gmail.com",
+    base: AppProfile.Base(
+        name: "John Doe",
+        age: "29",
+        bornGender: "Male"
+    ),
+    details: AppProfile.Details(
+        aboutMe: "I do some modeling jobs.\nIf I don't answer here, follow me on the other network and send me a message and I'll always answer.\n@andr_essa_novais \u{2764}",
+        city: "San Francisco",
+        sign: "Aquarius",
+        kids: "Don't Want",
+        drinks: "Socially",
+        smokes: "Never",
+        height: "165 cm",
+        languages: ["English", "Spanish"],
+        job: "Psychologist",
+        graduation: "Psychology"
+    ),
+    attributes: AppProfile.Attributes(
+        musicGenres: ["Rock", "Classical", "Jazz"],
+        watchingReading: ["Sci-Fi", "Fantasy", "Non-fiction"],
+        gameGenres: ["Strategy", "Puzzle", "Adventure"],
+        firstDate: "Coffee shop",
+        breadwinnerHomemaker: "Equal partnership",
+        cleaningRoutines: "Weekly",
+        hobbiesInterests: ["Hiking", "Coding", "Traveling"],
+        whenIGoOutILikeTo: ["Explore new restaurants", "Visit museums", "Go to concerts"],
+        foodCuisinePreferences: ["Italian", "Mexican", "Japanese"],
+        travel: ["Beach", "City", "Countryside"],
+        philosophyOfLife: "Live and let live",
+        petPreferences: ["Dogs", "Cats"],
+        urbanRural: ["Urban"],
+        socialMedia: "Minimal use",
+        lifestyle: "Active",
+        religion: "Agnostic",
+        socialPreferences: ["Small gatherings", "One-on-one"],
+        familyValues: ["Close-knit"],
+        sexualOrientation: ["Straight"],
+        genderIdentity: "Cisgender",
+        politicalPositioning: "Moderate",
+        bodyType: ["Athletic"],
+        skinColor: "Medium",
+        mentalHealthDisorder: ["Anxiety disorders"],
+        healthProblems: ["I have no health problems"],
+        clothingStyle: ["Casual", "Smart casual"],
+        communicationStyle: ["Open", "Honest"],
+        financialManagement: ["Saver", "Investor"],
+        lifeGoals: ["Career success", "Travel"],
+        environmentalConcerns: ["Recycling", "Conservation"],
+        humorStyle: ["Sarcastic", "Dry"],
+        socializingPreferences: ["Bars", "Home gatherings"],
+        futureFamilyPlans: "Open to possibilities",
+        personalityTraits: ["Thoughtful", "Analytical"],
+        conflictResolutionStyle: ["Discussion", "Compromise"],
+        privacyIndependence: ["Valued", "Respected"]
+    ),
+    imageUrls: [
+        "https://i.pinimg.com/736x/5e/50/a5/5e50a55755f443649181f76a90ee4aa7.jpg",
+        "https://i.pinimg.com/736x/18/85/2c/18852c7db70d38a00a9a5534eab2c869.jpg",
+        "https://i.pinimg.com/736x/4d/bf/71/4dbf71b50ab6ad7bff3a1c7232533a5e.jpg",
+        "https://i.pinimg.com/736x/78/9f/53/789f53dafa9752275504d0f3c3067073.jpg",
+        "https://i.pinimg.com/originals/24/81/40/248140144a26042c0e4fa9b413e96090.jpg",
+        "https://i.pinimg.com/474x/4e/d3/e3/4ed3e327d5c81bb1ca07d8f86216df2d.jpg"
+    ]
+)

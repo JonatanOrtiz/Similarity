@@ -25,7 +25,11 @@ final class ProfileViewModel: ProfileViewModeling {
     @Published var profile: AppProfile?
     @Published var error: CustomError?
     @Published var tryAgainAction: Action?
-    @Published var isLoading = true
+    @Published var isLoading = true {
+        didSet {
+            print(oldValue)
+        }
+    }
 
     private var cancellables = Set<AnyCancellable>()
     private let dependencies: Dependencies
