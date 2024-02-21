@@ -2,7 +2,7 @@
 //  LoadingView.swift
 //  UI
 //
-//  Created by Jonatan Ortiz on 20/02/24.
+//  Created by Jonatan Ortiz on 21/02/24.
 //
 
 import SwiftUI
@@ -17,14 +17,20 @@ public struct LoadingView: View {
     public var body: some View {
         VStack {
             Spacer()
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: .primaryColor))
-                .scaleEffect(2, anchor: .center)
-            Text(text ?? Strings.Ui.loading)
-                .headline()
-                .padding(.top, 30)
+            Spinner()
+            if let text {
+                Text(text)
+                    .headline()
+                    .padding(.top, 30)
+            }
             Spacer()
         }
         .backgroundImage()
+    }
+}
+
+struct LoadingView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoadingView()
     }
 }

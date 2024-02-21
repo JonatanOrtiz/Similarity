@@ -16,7 +16,7 @@ public struct ProfileLoadingView<ViewModeling>: View where ViewModeling: Profile
     public var body: some View {
         Group {
             if viewModel.isLoading {
-                LoadingView(text: Localizable.loading)
+                LoadingView()
             } else if let profile = viewModel.profile {
                 ProfileView(profile: profile)
             } else if viewModel.error != nil {

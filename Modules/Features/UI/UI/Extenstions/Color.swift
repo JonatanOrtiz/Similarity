@@ -14,9 +14,11 @@ public extension Color {
     static var appPurple: Self { Color(Colors.appPurple.rawValue, bundle: Bundle.ui) }
     static var appBlue: Self { Color(Colors.appBlue.rawValue, bundle: Bundle.ui) }
     static var darkPurple: Self { Color(Colors.darkPurple.rawValue, bundle: Bundle.ui) }
+    static var lightPurple: Self { Color(Colors.lightPurple.rawValue, bundle: Bundle.ui) }
     static var primaryPurple: Self { Color(Colors.primaryPurple.rawValue, bundle: Bundle.ui) }
     static var appBackground: Self { Color(Colors.appBackground.rawValue, bundle: Bundle.ui) }
     static var appWhite: Self { Color(Colors.appWhite.rawValue, bundle: Bundle.ui) }
+    static var appPink: Self { Color(Colors.appPink.rawValue, bundle: Bundle.ui) }
 }
 
 // MARK: - Hexa To RGB
