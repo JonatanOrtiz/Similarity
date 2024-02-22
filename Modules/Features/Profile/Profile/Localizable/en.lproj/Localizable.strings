@@ -44,6 +44,10 @@
 "profile.conflictResolutionStyle" = "Conflict Resolution Style";
 "profile.privacyIndependence" = "Privacy and Independence";
 "profile.loading" = "Loading profile...";
+"profile.edit" = "Edit Profile";
 
 //MARK: - ProfileError
 "profileError.getUserId" = "Error when trying to access logged in user data.";
+
+//MARK: - Profile ErrorView
+"profileErrorView.button" = "Try Again";

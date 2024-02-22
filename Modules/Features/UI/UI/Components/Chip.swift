@@ -84,5 +84,3 @@ public struct ChipData: Identifiable, Hashable {
         self.sfIcon = sfIcon
     }
 }
-
-

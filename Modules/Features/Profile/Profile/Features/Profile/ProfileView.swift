@@ -19,29 +19,22 @@ public struct ProfileLoadingView<ViewModeling>: View where ViewModeling: Profile
                 LoadingView()
             } else if let profile = viewModel.profile {
                 ProfileView(profile: profile)
-            } else if viewModel.error != nil {
-                errorView()
+            } else if let error = viewModel.error {
+                ErrorView(
+                    title: error.title,
+                    message: error.message,
+                    secondaryButton: ErrorViewButton(
+                        title: Strings.ProfileErrorView.button,
+                        action: {
+                            viewModel.fetchProfile()
+                        })
+                )
             }
         }
         .onAppear {
             if viewModel.isLoading {
                 viewModel.fetchProfile()
             }
-        }
-        .backgroundImage()
-    }
-
-    // create later
-    private func errorView() -> some View {
-        VStack {
-            Spacer()
-            Text("An error occurred while fetching the profile.")
-                .foregroundColor(.red)
-            Spacer()
-            Button("Try Again") {
-                viewModel.fetchProfile()
-            }
-            Spacer()
         }
         .backgroundImage()
     }
@@ -74,8 +67,6 @@ struct ProfileView: View {
         return chips
     }
 
-    let imageUrls: [AssetImage] = [.someImageExample1, .someImageExample2, .someImageExample3, .someImageExample4, .someImageExample5, .someImageExample6]
-
     init(profile: AppProfile) {
         self.profile = profile
     }
@@ -84,49 +75,12 @@ struct ProfileView: View {
         VStack {
             TopItems
             ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading) {
+                VStack {
                     ImagesCarrousel
-                    sectionTitle(title: Localizable.aboutMe)
+                    EditProfileButton
                     AboutMe
-                    sectionTitle(title: Localizable.myDetails)
-                    makeChips(chips: detailsChips)
-                    makeSection(title: Localizable.languages, attributes: profile.details.languages)
-                    makeSection(title: Localizable.musicGenres, attributes: profile.attributes.musicGenres)
-                    makeSection(title: Localizable.watchingReading, attributes: profile.attributes.watchingReading)
-                    makeSection(title: Localizable.gameGenres, attributes: profile.attributes.gameGenres)
-                    makeSection(title: Localizable.firstDate, attribute: profile.attributes.firstDate)
-                    makeSection(title: Localizable.breadwinnerHomemaker, attribute: profile.attributes.breadwinnerHomemaker)
-                    makeSection(title: Localizable.cleaningRoutines, attribute: profile.attributes.cleaningRoutines)
-                    makeSection(title: Localizable.hobbiesInterests, attributes: profile.attributes.hobbiesInterests)
-                    makeSection(title: Localizable.whenIGoOutILikeTo, attributes: profile.attributes.whenIGoOutILikeTo)
-                    makeSection(title: Localizable.foodCuisinePreferences, attributes: profile.attributes.foodCuisinePreferences)
-                    makeSection(title: Localizable.travel, attributes: profile.attributes.travel)
-                    makeSection(title: Localizable.philosophyOfLife, attribute: profile.attributes.philosophyOfLife)
-                    makeSection(title: Localizable.petPreferences, attributes: profile.attributes.petPreferences)
-                    makeSection(title: Localizable.urbanRural, attributes: profile.attributes.urbanRural)
-                    makeSection(title: Localizable.socialMedia, attribute: profile.attributes.socialMedia)
-                    makeSection(title: Localizable.lifestyle, attribute: profile.attributes.lifestyle)
-                    makeSection(title: Localizable.religion, attribute: profile.attributes.religion)
-                    makeSection(title: Localizable.socialPreferences, attributes: profile.attributes.socialPreferences)
-                    makeSection(title: Localizable.familyValues, attributes: profile.attributes.familyValues)
-                    makeSection(title: Localizable.sexualOrientation, attributes: profile.attributes.sexualOrientation)
-                    makeSection(title: Localizable.genderIdentity, attribute: profile.attributes.genderIdentity)
-                    makeSection(title: Localizable.politicalPositioning, attribute: profile.attributes.politicalPositioning)
-                    makeSection(title: Localizable.bodyType, attributes: profile.attributes.bodyType)
-                    makeSection(title: Localizable.skinColor, attribute: profile.attributes.skinColor)
-                    makeSection(title: Localizable.mentalHealthDisorder, attributes: profile.attributes.mentalHealthDisorder)
-                    makeSection(title: Localizable.healthProblems, attributes: profile.attributes.healthProblems)
-                    makeSection(title: Localizable.clothingStyle, attributes: profile.attributes.clothingStyle)
-                    makeSection(title: Localizable.communicationStyle, attributes: profile.attributes.communicationStyle)
-                    makeSection(title: Localizable.financialManagement, attributes: profile.attributes.financialManagement)
-                    makeSection(title: Localizable.lifeGoals, attributes: profile.attributes.lifeGoals)
-                    makeSection(title: Localizable.environmentalConcerns, attributes: profile.attributes.environmentalConcerns)
-                    makeSection(title: Localizable.humorStyle, attributes: profile.attributes.humorStyle)
-                    makeSection(title: Localizable.socializingPreferences, attributes: profile.attributes.socializingPreferences)
-                    makeSection(title: Localizable.futureFamilyPlans, attribute: profile.attributes.futureFamilyPlans)
-                    makeSection(title: Localizable.personalityTraits, attributes: profile.attributes.personalityTraits)
-                    makeSection(title: Localizable.conflictResolutionStyle, attributes: profile.attributes.conflictResolutionStyle)
-                    makeSection(title: Localizable.privacyIndependence, attributes: profile.attributes.privacyIndependence)
+                    Details
+                    Attributes
                 }
                 .padding(.bottom, 60)
             }
@@ -169,7 +123,7 @@ extension ProfileView {
                             }
                         },
                         onTapRight: {
-                            if selectedImageIndex < imageUrls.count - 1 {
+                            if selectedImageIndex < profile.imageUrls.count - 1 {
                                 selectedImageIndex += 1
                             }
                         })
@@ -214,15 +168,78 @@ extension ProfileView {
         .padding()
     }
 
-    var AboutMe: some View {
-        VStack(alignment: .leading, spacing: 15) {
-            Text(profile.details.aboutMe)
-                .bodyBold(.white)
-                .lineSpacing(7)
-                .fixedSize(horizontal: false, vertical: true)
+    var EditProfileButton: some View {
+        FlatGlassButton(
+            text: Strings.Profile.edit,
+            backgroundColor: .appPink,
+            horizontalPadding: 50
+        ) {
+            print("")
         }
-        .padding(18)
-        .flatGlassCard(color: .appPurple)
+        .padding(.top, 25)
+    }
+
+    var AboutMe: some View {
+        VStack(alignment: .leading) {
+            sectionTitle(title: Localizable.aboutMe)
+            VStack(alignment: .leading, spacing: 15) {
+                Text(profile.details.aboutMe)
+                    .bodyBold(.white)
+                    .lineSpacing(7)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(18)
+            .flatGlassCard(color: .appPurple)
+        }
+    }
+
+    var Details: some View {
+        VStack(alignment: .leading) {
+            sectionTitle(title: Localizable.myDetails)
+            makeChips(chips: detailsChips)
+        }
+    }
+
+    var Attributes: some View {
+        VStack(alignment: .leading) {
+            makeSection(title: Localizable.languages, attributes: profile.details.languages)
+            makeSection(title: Localizable.musicGenres, attributes: profile.attributes.musicGenres)
+            makeSection(title: Localizable.watchingReading, attributes: profile.attributes.watchingReading)
+            makeSection(title: Localizable.gameGenres, attributes: profile.attributes.gameGenres)
+            makeSection(title: Localizable.firstDate, attribute: profile.attributes.firstDate)
+            makeSection(title: Localizable.breadwinnerHomemaker, attribute: profile.attributes.breadwinnerHomemaker)
+            makeSection(title: Localizable.cleaningRoutines, attribute: profile.attributes.cleaningRoutines)
+            makeSection(title: Localizable.hobbiesInterests, attributes: profile.attributes.hobbiesInterests)
+            makeSection(title: Localizable.whenIGoOutILikeTo, attributes: profile.attributes.whenIGoOutILikeTo)
+            makeSection(title: Localizable.foodCuisinePreferences, attributes: profile.attributes.foodCuisinePreferences)
+            makeSection(title: Localizable.travel, attributes: profile.attributes.travel)
+            makeSection(title: Localizable.philosophyOfLife, attribute: profile.attributes.philosophyOfLife)
+            makeSection(title: Localizable.petPreferences, attributes: profile.attributes.petPreferences)
+            makeSection(title: Localizable.urbanRural, attributes: profile.attributes.urbanRural)
+            makeSection(title: Localizable.socialMedia, attribute: profile.attributes.socialMedia)
+            makeSection(title: Localizable.lifestyle, attribute: profile.attributes.lifestyle)
+            makeSection(title: Localizable.religion, attribute: profile.attributes.religion)
+            makeSection(title: Localizable.socialPreferences, attributes: profile.attributes.socialPreferences)
+            makeSection(title: Localizable.familyValues, attributes: profile.attributes.familyValues)
+            makeSection(title: Localizable.sexualOrientation, attributes: profile.attributes.sexualOrientation)
+            makeSection(title: Localizable.genderIdentity, attribute: profile.attributes.genderIdentity)
+            makeSection(title: Localizable.politicalPositioning, attribute: profile.attributes.politicalPositioning)
+            makeSection(title: Localizable.bodyType, attributes: profile.attributes.bodyType)
+            makeSection(title: Localizable.skinColor, attribute: profile.attributes.skinColor)
+            makeSection(title: Localizable.mentalHealthDisorder, attributes: profile.attributes.mentalHealthDisorder)
+            makeSection(title: Localizable.healthProblems, attributes: profile.attributes.healthProblems)
+            makeSection(title: Localizable.clothingStyle, attributes: profile.attributes.clothingStyle)
+            makeSection(title: Localizable.communicationStyle, attributes: profile.attributes.communicationStyle)
+            makeSection(title: Localizable.financialManagement, attributes: profile.attributes.financialManagement)
+            makeSection(title: Localizable.lifeGoals, attributes: profile.attributes.lifeGoals)
+            makeSection(title: Localizable.environmentalConcerns, attributes: profile.attributes.environmentalConcerns)
+            makeSection(title: Localizable.humorStyle, attributes: profile.attributes.humorStyle)
+            makeSection(title: Localizable.socializingPreferences, attributes: profile.attributes.socializingPreferences)
+            makeSection(title: Localizable.futureFamilyPlans, attribute: profile.attributes.futureFamilyPlans)
+            makeSection(title: Localizable.personalityTraits, attributes: profile.attributes.personalityTraits)
+            makeSection(title: Localizable.conflictResolutionStyle, attributes: profile.attributes.conflictResolutionStyle)
+            makeSection(title: Localizable.privacyIndependence, attributes: profile.attributes.privacyIndependence)
+        }
     }
 }
 
