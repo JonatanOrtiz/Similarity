@@ -1,5 +1,5 @@
 //
-//  User.swift
+//  AppUser.swift
 //  CoreInterface
 //
 //  Created by Jonatan Ortiz on 29/09/23.

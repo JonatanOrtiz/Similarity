@@ -26,7 +26,7 @@ struct AppEntryPoint: View {
     
     var body: some View {
         if auth.user != nil {
-            NavigationHubView()
+            EditProfile()
         } else {
             SignInFactory.make()
         }

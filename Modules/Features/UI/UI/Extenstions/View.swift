@@ -166,4 +166,21 @@ public extension View {
     ) -> some View {
         self.padding(EdgeInsets(top: top, leading: leading, bottom: bottom, trailing: trailing))
     }
+    
+    func cropImagePicker(
+        show: Binding<Bool>,
+        completion: @escaping (Image) -> Void
+    ) -> some View {
+        CropImagePicker(show: show, completion: completion) {
+            self
+        }
+    }
+
+    func frame(_ size: CGSize) -> some View {
+        self.frame(width: size.width, height: size.height)
+    }
+
+    func haptics(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        UIImpactFeedbackGenerator(style: style).impactOccurred()
+    }
 }

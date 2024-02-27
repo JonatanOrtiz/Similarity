@@ -8,12 +8,12 @@
 import SwiftUI
 import UI
 
-public struct SignInView<ViewModeling>: View where ViewModeling: SignInViewModeling {
+struct SignInView<ViewModeling>: View where ViewModeling: SignInViewModeling {
     @StateObject var viewModel: ViewModeling
     @State private var email = String()
     @State private var password = String()
     
-    public var body: some View {
+    var body: some View {
         NavigationView {
             VStack(alignment: .center) {
                 Spacer()

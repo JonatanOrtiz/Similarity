@@ -11,9 +11,9 @@ import CoreInterface
 
 final class SignInTests: XCTestCase {
     func testSignIn_whenSuccess_ShouldReceiveTheRightValues() {
-        let (sut, doubles): (any SignInViewModeling, Doubles<User>) = makeSUT()
+        let (sut, doubles): (any SignInViewModeling, Doubles<AppUser>) = makeSUT()
         let event = SignInAnalytics.buttonClicked(.signIn).equatableEvent()
-        let user = User(uid: "789", email: "email@test.com")
+        let user = AppUser(uid: "789", email: "email@test.com")
         let email = "email@test.com"
         let password = "123"
         
@@ -32,7 +32,7 @@ final class SignInTests: XCTestCase {
     }
     
     func testSignIn_whenFailure_ShouldReceiveTheRightValues() {
-        let (sut, doubles): (any SignInViewModeling, Doubles<User>) = makeSUT()
+        let (sut, doubles): (any SignInViewModeling, Doubles<AppUser>) = makeSUT()
         let event = SignInAnalytics.buttonClicked(.signIn).equatableEvent()
         let email = "email@test.com"
         let password = "123"
@@ -52,9 +52,9 @@ final class SignInTests: XCTestCase {
     }
     
     func testSignInWithGoogle_whenSuccess_ShouldReceiveTheRightValues() {
-        let (sut, doubles): (any SignInViewModeling, Doubles<User>) = makeSUT()
+        let (sut, doubles): (any SignInViewModeling, Doubles<AppUser>) = makeSUT()
         let event = SignInAnalytics.buttonClicked(.signInWithGoogle).equatableEvent()
-        let user = User(uid: "789", email: "email@test.com")
+        let user = AppUser(uid: "789", email: "email@test.com")
         let email = "email@test.com"
         
         doubles.authMock.expectedResult = .success(user)
@@ -70,7 +70,7 @@ final class SignInTests: XCTestCase {
     }
     
     func testSignInWithGoogle_whenFailure_ShouldReceiveTheRightValues() {
-        let (sut, doubles): (any SignInViewModeling, Doubles<User>) = makeSUT()
+        let (sut, doubles): (any SignInViewModeling, Doubles<AppUser>) = makeSUT()
         let event = SignInAnalytics.buttonClicked(.signInWithGoogle).equatableEvent()
         
         doubles.authMock.expectedResult = .failure(AuthenticationError.unknown)
