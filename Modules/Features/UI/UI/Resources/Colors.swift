@@ -16,6 +16,7 @@ public enum Colors: String {
     case darkPurple
     case lightPurple
     case primaryPurple
+    case secondaryPurple
     case appBackground
     case appWhite
     case appPink

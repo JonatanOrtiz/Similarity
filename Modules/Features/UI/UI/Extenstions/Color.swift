@@ -16,6 +16,7 @@ public extension Color {
     static var darkPurple: Self { Color(Colors.darkPurple.rawValue, bundle: Bundle.ui) }
     static var lightPurple: Self { Color(Colors.lightPurple.rawValue, bundle: Bundle.ui) }
     static var primaryPurple: Self { Color(Colors.primaryPurple.rawValue, bundle: Bundle.ui) }
+    static var secondaryPurple: Self { Color(Colors.secondaryPurple.rawValue, bundle: Bundle.ui) }
     static var appBackground: Self { Color(Colors.appBackground.rawValue, bundle: Bundle.ui) }
     static var appWhite: Self { Color(Colors.appWhite.rawValue, bundle: Bundle.ui) }
     static var appPink: Self { Color(Colors.appPink.rawValue, bundle: Bundle.ui) }

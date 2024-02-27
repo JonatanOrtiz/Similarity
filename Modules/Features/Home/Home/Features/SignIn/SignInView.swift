@@ -109,9 +109,7 @@ struct SignInView<ViewModeling>: View where ViewModeling: SignInViewModeling {
     }
 }
 
-struct SignInView_Previews: PreviewProvider {
-    static var previews: some View {
-        PreviewDependencyOrchestrator.start()
-        return SignInView(viewModel: SignInViewModel(dependencies: DependencyContainer()))
-    }
+#Preview {
+    PreviewDependencyOrchestrator.start()
+    return SignInView(viewModel: SignInViewModel(dependencies: DependencyContainer()))
 }

@@ -30,10 +30,10 @@ public extension Image {
 
 // MARK: - SFSymbol
 public extension Image {
-    static func assetSFSymbol(_ image: SFSymbol, color: Color? = nil) -> some View {
-        Image(systemName: image.rawValue)
+    static func assetSFSymbol(_ image: SFSymbol, color: Color = .appWhite, font: Font = .system(size: 12)) -> some View {
+        return Image(systemName: image.rawValue)
             .renderingMode(.template)
-            .foregroundColor(.appWhite)
-            .font(.system(size: 12))
+            .foregroundColor(color)
+            .font(font)
     }
 }

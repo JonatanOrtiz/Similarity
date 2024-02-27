@@ -97,9 +97,7 @@ public struct RegisterView<ViewModeling>: View where ViewModeling: RegisterViewM
     }
 }
 
-struct RegisterView_Previews: PreviewProvider {
-    static var previews: some View {
-        PreviewDependencyOrchestrator.start()
-        return RegisterView(viewModel: RegisterViewModel(dependencies: DependencyContainer()))
-    }
+#Preview {
+    PreviewDependencyOrchestrator.start()
+    return RegisterView(viewModel: RegisterViewModel(dependencies: DependencyContainer()))
 }

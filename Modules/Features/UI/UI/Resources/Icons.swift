@@ -22,5 +22,12 @@ public enum SFSymbol: String {
     case sparkles
     case wineglass
     case flame
+    case xMark = "xmark"
+    case checkmark
+    case equalCircle = "equal.circle"
     case pencilAndRuler = "pencil.and.ruler"
+    case listBullet = "list.bullet"
+    case plusCircleFill = "plus.circle.fill"
+    case xMarkCircleFill = "xmark.circle.fill"
+    case checkmarkCircle = "checkmark.circle"
 }

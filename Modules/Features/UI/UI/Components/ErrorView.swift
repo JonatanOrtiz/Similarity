@@ -90,13 +90,11 @@ public struct ErrorViewButton {
     }
 }
 
-struct ErrorView_Previews: PreviewProvider {
-    static var previews: some View {
-        ErrorView(
-            title: "Profile Error",
-            message: "Error trying to access profile data",
-            primaryButton: .init(title: "Ok", action: {}),
-            secondaryButton: .init(title: "Try Again", action: {})
-        )
-    }
+#Preview {
+    ErrorView(
+        title: "Profile Error",
+        message: "Error trying to access profile data",
+        primaryButton: .init(title: "Ok", action: {}),
+        secondaryButton: .init(title: "Try Again", action: {})
+    )
 }

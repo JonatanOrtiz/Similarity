@@ -86,9 +86,7 @@ struct CropView: View {
                             }
                             dismiss()
                         } label: {
-                            Image(systemName: "checkmark")
-                                .font(.callout)
-                                .fontWeight(.semibold)
+                            Image.assetSFSymbol(.checkmark, font: .system(.callout, weight: .semibold))
                         }
                     }
 
@@ -96,9 +94,7 @@ struct CropView: View {
                         Button {
                             dismiss()
                         } label: {
-                            Image(systemName: "xmark")
-                                .font(.callout)
-                                .fontWeight(.semibold)
+                            Image.assetSFSymbol(.xMark, font: .system(.callout, weight: .semibold))
                         }
                     }
                 }

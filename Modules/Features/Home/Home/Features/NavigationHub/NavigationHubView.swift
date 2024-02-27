@@ -93,11 +93,9 @@ public struct NavigationHubView: View {
     }
 }
 
-struct HomeContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        PreviewDependencyOrchestrator.start()
-        return NavigationHubView()
-    }
+#Preview {
+    PreviewDependencyOrchestrator.start()
+    return NavigationHubView()
 }
 
 enum Tab: String, CaseIterable {

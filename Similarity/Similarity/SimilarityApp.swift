@@ -26,7 +26,7 @@ struct AppEntryPoint: View {
     
     var body: some View {
         if auth.user != nil {
-            EditProfile()
+            EditProfileFactory.make(profile: AppProfile.fixture())
         } else {
             SignInFactory.make()
         }

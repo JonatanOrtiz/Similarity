@@ -95,18 +95,14 @@ struct ProfileView: View {
 extension ProfileView {
     var TopItems: some View {
         HStack {
-            Image(systemName: "list.bullet")
-                .font(.system(size: 20, weight: .bold))
-                .foregroundColor(.primaryColor)
+            Image.assetSFSymbol(.listBullet, color: .primaryColor, font: .system(size: 20, weight: .bold))
                 .padding(.leading)
             Spacer()
             Text("Similarity")
                 .font(.system(size: 24, weight: .bold, design: .rounded))
                 .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.appPurple, .appBlue]), startPoint: .leading, endPoint: .trailing))
             Spacer()
-            Image(systemName: "equal.circle")
-                .font(.system(size: 20, weight: .bold))
-                .foregroundColor(.primaryColor)
+            Image.assetSFSymbol(.equalCircle, color: .primaryColor, font: .system(size: 20, weight: .bold))
                 .padding(.trailing)
         }
     }
@@ -305,89 +301,17 @@ extension ProfileView {
     }
 }
 
- // MARK: - ProfileLoadingView Previews
- struct ProfileLoadingView_Previews: PreviewProvider {
-    static var previews: some View {
-        PreviewDependencyOrchestrator.start()
-        return ProfileLoadingView(viewModel: ProfileViewModel(dependencies: DependencyContainer()))
-            .environment(\.locale, .init(identifier: "pt-BR"))
-    }
- }
-
-// MARK: - ProfileView Previews
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        PreviewDependencyOrchestrator.start()
-        return ProfileView(profile: mockProfile)
-            .backgroundImage()
-            .environment(\.locale, .init(identifier: "pt-BR"))
-    }
+// MARK: - ProfileLoadingView Previews
+#Preview {
+    PreviewDependencyOrchestrator.start()
+    return ProfileLoadingView(viewModel: ProfileViewModel(dependencies: DependencyContainer()))
+        .environment(\.locale, .init(identifier: "pt-BR"))
 }
 
-let mockProfile = AppProfile(
-    uid: "hgFDA4A2YMRoFHNuSZvX1VtRgO43",
-    email: "jonataneduard@gmail.com",
-    base: AppProfile.Base(
-        name: "John Doe",
-        age: "29",
-        bornGender: "Male"
-    ),
-    details: AppProfile.Details(
-        aboutMe: "I do some modeling jobs.\nIf I don't answer here, follow me on the other network and send me a message and I'll always answer.\n@andr_essa_novais \u{2764}",
-        city: "San Francisco",
-        sign: "Aquarius",
-        kids: "Don't Want",
-        drinks: "Socially",
-        smokes: "Never",
-        height: "165 cm",
-        languages: ["English", "Spanish"],
-        job: "Psychologist",
-        graduation: "Psychology"
-    ),
-    attributes: AppProfile.Attributes(
-        musicGenres: ["Rock", "Classical", "Jazz"],
-        watchingReading: ["Sci-Fi", "Fantasy", "Non-fiction"],
-        gameGenres: ["Strategy", "Puzzle", "Adventure"],
-        firstDate: "Coffee shop",
-        breadwinnerHomemaker: "Equal partnership",
-        cleaningRoutines: "Weekly",
-        hobbiesInterests: ["Hiking", "Coding", "Traveling"],
-        whenIGoOutILikeTo: ["Explore new restaurants", "Visit museums", "Go to concerts"],
-        foodCuisinePreferences: ["Italian", "Mexican", "Japanese"],
-        travel: ["Beach", "City", "Countryside"],
-        philosophyOfLife: "Live and let live",
-        petPreferences: ["Dogs", "Cats"],
-        urbanRural: ["Urban"],
-        socialMedia: "Minimal use",
-        lifestyle: "Active",
-        religion: "Agnostic",
-        socialPreferences: ["Small gatherings", "One-on-one"],
-        familyValues: ["Close-knit"],
-        sexualOrientation: ["Straight"],
-        genderIdentity: "Cisgender",
-        politicalPositioning: "Moderate",
-        bodyType: ["Athletic"],
-        skinColor: "Medium",
-        mentalHealthDisorder: ["Anxiety disorders"],
-        healthProblems: ["I have no health problems"],
-        clothingStyle: ["Casual", "Smart casual"],
-        communicationStyle: ["Open", "Honest"],
-        financialManagement: ["Saver", "Investor"],
-        lifeGoals: ["Career success", "Travel"],
-        environmentalConcerns: ["Recycling", "Conservation"],
-        humorStyle: ["Sarcastic", "Dry"],
-        socializingPreferences: ["Bars", "Home gatherings"],
-        futureFamilyPlans: "Open to possibilities",
-        personalityTraits: ["Thoughtful", "Analytical"],
-        conflictResolutionStyle: ["Discussion", "Compromise"],
-        privacyIndependence: ["Valued", "Respected"]
-    ),
-    imageUrls: [
-        "https://i.pinimg.com/736x/5e/50/a5/5e50a55755f443649181f76a90ee4aa7.jpg",
-        "https://i.pinimg.com/736x/18/85/2c/18852c7db70d38a00a9a5534eab2c869.jpg",
-        "https://i.pinimg.com/736x/4d/bf/71/4dbf71b50ab6ad7bff3a1c7232533a5e.jpg",
-        "https://i.pinimg.com/736x/78/9f/53/789f53dafa9752275504d0f3c3067073.jpg",
-        "https://i.pinimg.com/originals/24/81/40/248140144a26042c0e4fa9b413e96090.jpg",
-        "https://i.pinimg.com/474x/4e/d3/e3/4ed3e327d5c81bb1ca07d8f86216df2d.jpg"
-    ]
-)
+// MARK: - ProfileView Previews
+#Preview {
+    PreviewDependencyOrchestrator.start()
+    return ProfileView(profile: AppProfile.fixture())
+        .backgroundImage()
+        .environment(\.locale, .init(identifier: "pt-BR"))
+}
