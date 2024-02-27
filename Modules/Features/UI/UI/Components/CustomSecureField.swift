@@ -8,23 +8,26 @@
 import SwiftUI
 
 public struct CustomSecureField: View {
-    @Binding public var text: String
-    public let placeholder: String
-    public let textContentType: UITextContentType?
+    @Binding var text: String
+    let placeholder: String
+    let textContentType: UITextContentType?
+    let backgroundColor: Color
 
     public init(
         text: Binding<String>,
         placeholder: String,
-        textContentType: UITextContentType? = nil
+        textContentType: UITextContentType? = nil,
+        backgroundColor: Color = .clear
     ) {
         self._text = text
         self.placeholder = placeholder
         self.textContentType = textContentType
+        self.backgroundColor = backgroundColor
     }
 
     public var body: some View {
         SecureField(placeholder, text: $text)
-            .textFieldStyle(CustomTextFieldStyle())
+            .textFieldStyle(CustomTextFieldStyle(backgroundColor: backgroundColor))
             .textContentType(textContentType)
     }
 }

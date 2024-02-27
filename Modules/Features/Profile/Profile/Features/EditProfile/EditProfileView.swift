@@ -10,19 +10,38 @@ import Combine
 import UI
 
 struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewModeling {
+    typealias Localizable = Strings.EditProfile
+
     @StateObject var viewModel: ViewModeling
     @FocusState private var isInputActive: Bool
+
     let characterLimit = 200
 
     var body: some View {
-        VStack {
-            PhotoGridView()
-            AboutMeTextField
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading) {
+                PhotoGridView()
+                sectionTitle(title: Localizable.aboutMe)
+                AboutMeTextField
+                sectionTitle(title: Localizable.myDetails)
+                CustomTextField(
+                    text: binding(for: $viewModel.profile.details.job),
+                    placeholder: Localizable.jobTextField,
+                    backgroundColor: .secondaryPurple
+                )
+                .padding(10, 15, 0, 15)
+                CustomTextField(
+                    text: binding(for: $viewModel.profile.details.graduation),
+                    placeholder: Localizable.graduationTextField,
+                    backgroundColor: .secondaryPurple
+                )
+                .padding(10, 15, 0, 15)
+            }
+            .onTapGesture {
+                self.hideKeyboard()
+            }
         }
         .backgroundImage()
-        .onTapGesture {
-            self.hideKeyboard()
-        }
     }
 
     private var AboutMeTextField: some View {
@@ -38,8 +57,8 @@ struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewMo
                 .focused($isInputActive)
                 .frame(height: 200)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.primaryColor, lineWidth: 1)
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .toolbar {
@@ -48,7 +67,7 @@ struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewMo
                         Button(action: {
                             isInputActive = false
                         }, label: {
-                            Text("Done")
+                            Text(Localizable.Keyboard.doneButton)
                                 .calloutBold()
                             Image
                                 .assetSFSymbol(
@@ -61,7 +80,14 @@ struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewMo
                 .foregroundColor(.gray)
                 .padding(.trailing, 5)
         }
-        .padding()
+        .padding(.horizontal, 15)
+    }
+
+    private func sectionTitle(title: String) -> some View {
+        Text.localized(LocalizedStringKey(title))
+            .secondaryTitleBold(.primaryColor)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(25, 15, 5, 15)
     }
 
     private func hideKeyboard() {
@@ -74,6 +100,13 @@ struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewMo
         if viewModel.profile.details.aboutMe.count > upper {
             viewModel.profile.details.aboutMe = String(viewModel.profile.details.aboutMe.prefix(upper))
         }
+    }
+
+    private func binding(for optionalString: Binding<String?>) -> Binding<String> {
+        Binding<String>(
+            get: { optionalString.wrappedValue ?? String() },
+            set: { newValue in optionalString.wrappedValue = newValue.isEmpty ? nil : newValue }
+        )
     }
 }
 
@@ -88,47 +121,45 @@ extension EditProfileView {
         @State private var replacementIndex: Int?
 
         private let maxPhotos = 6
+        private let size = UIScreen.main.bounds.width / 3 - 20
 
         var body: some View {
-            GeometryReader { geometry in
-                let size = geometry.size.width / 3 - 20
-                VStack {
-                    LazyVGrid(
-                        columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())],
-                        spacing: 10
-                    ) {
-                        ForEach(0..<maxPhotos, id: \.self) { index in
-                            if index < photos.count {
-                                imageForPhoto(index, size)
-                                    .onDrag {
-                                        self.activePhotoId = photos[index].id
-                                        return NSItemProvider(object: String(photos[index].id.uuidString) as NSString)
-                                    }
-                                    .onDrop(
-                                        of: [.text],
-                                        delegate: PhotoDropDelegate(
-                                            currentPhoto: photos[index],
-                                            photos: $photos,
-                                            activePhotoId: $activePhotoId
-                                        )
+            VStack {
+                LazyVGrid(
+                    columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())],
+                    spacing: 10
+                ) {
+                    ForEach(0..<maxPhotos, id: \.self) { index in
+                        if index < photos.count {
+                            imageForPhoto(index, size)
+                                .onDrag {
+                                    self.activePhotoId = photos[index].id
+                                    return NSItemProvider(object: String(photos[index].id.uuidString) as NSString)
+                                }
+                                .onDrop(
+                                    of: [.text],
+                                    delegate: PhotoDropDelegate(
+                                        currentPhoto: photos[index],
+                                        photos: $photos,
+                                        activePhotoId: $activePhotoId
                                     )
-                            }
-                        }
-                        ForEach(0..<(maxPhotos - photos.count), id: \.self) { _ in
-                            addButtonOrPlaceholder(size)
+                                )
                         }
                     }
-                    .cropImagePicker(show: $showingImagePicker) { selectedImage in
-                        let newPhoto = Photo(image: selectedImage)
-                        if let replacementIndex = replacementIndex, replacementIndex < photos.count {
-                            photos[replacementIndex] = newPhoto
-                        } else if photos.count < maxPhotos {
-                            self.photos.append(newPhoto)
-                        }
+                    ForEach(0..<(maxPhotos - photos.count), id: \.self) { _ in
+                        addButtonOrPlaceholder(size)
                     }
-                    .animation(.default, value: photos)
-                    .padding()
                 }
+                .cropImagePicker(show: $showingImagePicker) { selectedImage in
+                    let newPhoto = Photo(image: selectedImage)
+                    if let replacementIndex = replacementIndex, replacementIndex < photos.count {
+                        photos[replacementIndex] = newPhoto
+                    } else if photos.count < maxPhotos {
+                        self.photos.append(newPhoto)
+                    }
+                }
+                .animation(.default, value: photos)
+                .padding()
             }
         }
 

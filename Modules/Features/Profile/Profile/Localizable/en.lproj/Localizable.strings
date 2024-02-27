@@ -51,3 +51,10 @@
 
 //MARK: - Profile ErrorView
 "profileErrorView.button" = "Try Again";
+
+//MARK: - Edit Profile
+"editProfile.keyboard.doneButton" = "Done";
+"editProfile.jobTextField" = "Job";
+"editProfile.graduationTextField" = "Graduation";
+"editProfile.aboutMe" = "About me";
+"editProfile.myDetails" = "My details";
