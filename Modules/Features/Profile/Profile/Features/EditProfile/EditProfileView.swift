@@ -13,35 +13,101 @@ struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewMo
     typealias Localizable = Strings.EditProfile
 
     @StateObject var viewModel: ViewModeling
-    @FocusState private var isInputActive: Bool
 
     let characterLimit = 200
+
+    let languages: [String] = {
+        var seenNames = Set<String>()
+        return Locale.availableIdentifiers.compactMap { identifier in
+            let locale = Locale(identifier: identifier)
+            guard let languageCode = Locale(identifier: identifier).language.languageCode?.identifier,
+                  let languageName = locale.localizedString(forLanguageCode: languageCode),
+                    !seenNames.contains(languageName) else { return nil }
+            seenNames.insert(languageName)
+            return languageName.capitalized
+        }
+        .sorted { $0 < $1 }
+    }()
+
+    @State private var selectedLanguages: [String] = []
+
+    let maxLanguages = 5
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading) {
                 PhotoGridView()
+                sectionTitle(title: Localizable.languages)
+
+                ForEach(selectedLanguages, id: \.self) { selectedLanguage in
+                    Picker(Localizable.languages, selection: getLanguageBinding(for: selectedLanguage)) {
+                        ForEach(languages, id: \.self) { language in
+                            Text(language)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .accentColor(.white)
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(5)
+                }
+
+                if selectedLanguages.count < maxLanguages {
+                    Menu {
+                        ForEach(languages, id: \.self) { language in
+                            Button(language) {
+                                addLanguage(language)
+                            }
+                        }
+                    } label: {
+                        Label("Add Language", systemImage: "plus.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(.gray)
+                    }
+                    .frame(width: 50, height: 50)
+                }
+
                 sectionTitle(title: Localizable.aboutMe)
                 AboutMeTextField
                 sectionTitle(title: Localizable.myDetails)
                 CustomTextField(
                     text: binding(for: $viewModel.profile.details.job),
                     placeholder: Localizable.jobTextField,
-                    backgroundColor: .secondaryPurple
+                    backgroundColor: .white.opacity(0.2)
                 )
                 .padding(10, 15, 0, 15)
                 CustomTextField(
                     text: binding(for: $viewModel.profile.details.graduation),
                     placeholder: Localizable.graduationTextField,
-                    backgroundColor: .secondaryPurple
+                    backgroundColor: .white.opacity(0.2)
                 )
                 .padding(10, 15, 0, 15)
             }
-            .onTapGesture {
-                self.hideKeyboard()
-            }
         }
         .backgroundImage()
+    }
+
+    func getLanguageBinding(for language: String) -> Binding<String> {
+        Binding(
+            get: {
+                language
+            },
+            set: { newValue in
+                if selectedLanguages.contains(newValue) {
+                    selectedLanguages.removeAll { $0 == newValue }
+                } else {
+                    if let index = selectedLanguages.firstIndex(of: language) {
+                        selectedLanguages[index] = newValue
+                    }
+                }
+            }
+        )
+    }
+
+    func addLanguage(_ language: String) {
+        if !selectedLanguages.contains(language) {
+            selectedLanguages.append(language)
+        }
     }
 
     private var AboutMeTextField: some View {
@@ -53,19 +119,18 @@ struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewMo
                 .disableAutocorrection(true)
                 .padding(10)
                 .scrollContentBackground(.hidden)
-                .background(Color.secondaryPurple)
-                .focused($isInputActive)
+                .background(.white.opacity(0.2))
                 .frame(height: 200)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(Color.primaryColor, lineWidth: 1)
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 10))
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
                         Spacer()
                         Button(action: {
-                            isInputActive = false
+                            hideKeyboard()
                         }, label: {
                             Text(Localizable.Keyboard.doneButton)
                                 .calloutBold()
