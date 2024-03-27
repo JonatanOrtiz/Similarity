@@ -9,64 +9,17 @@ import SwiftUI
 import Combine
 import UI
 
+private typealias Localizable = Strings.EditProfile
+
 struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewModeling {
-    typealias Localizable = Strings.EditProfile
-
     @StateObject var viewModel: ViewModeling
-
-    let characterLimit = 200
-
-    let languages: [String] = {
-        var seenNames = Set<String>()
-        return Locale.availableIdentifiers.compactMap { identifier in
-            let locale = Locale(identifier: identifier)
-            guard let languageCode = Locale(identifier: identifier).language.languageCode?.identifier,
-                  let languageName = locale.localizedString(forLanguageCode: languageCode),
-                    !seenNames.contains(languageName) else { return nil }
-            seenNames.insert(languageName)
-            return languageName.capitalized
-        }
-        .sorted { $0 < $1 }
-    }()
-
-    @State private var selectedLanguages: [String] = []
-
-    let maxLanguages = 5
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading) {
                 PhotoGridView()
                 sectionTitle(title: Localizable.languages)
-
-                ForEach(selectedLanguages, id: \.self) { selectedLanguage in
-                    Picker(Localizable.languages, selection: getLanguageBinding(for: selectedLanguage)) {
-                        ForEach(languages, id: \.self) { language in
-                            Text(language)
-                        }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                    .accentColor(.white)
-                    .foregroundColor(.white)
-                    .background(Color.blue)
-                    .cornerRadius(5)
-                }
-
-                if selectedLanguages.count < maxLanguages {
-                    Menu {
-                        ForEach(languages, id: \.self) { language in
-                            Button(language) {
-                                addLanguage(language)
-                            }
-                        }
-                    } label: {
-                        Label("Add Language", systemImage: "plus.circle.fill")
-                            .font(.largeTitle)
-                            .foregroundColor(.gray)
-                    }
-                    .frame(width: 50, height: 50)
-                }
-
+                LanguagesView()
                 sectionTitle(title: Localizable.aboutMe)
                 AboutMeTextField
                 sectionTitle(title: Localizable.myDetails)
@@ -86,32 +39,14 @@ struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewMo
         }
         .backgroundImage()
     }
+}
 
-    func getLanguageBinding(for language: String) -> Binding<String> {
-        Binding(
-            get: {
-                language
-            },
-            set: { newValue in
-                if selectedLanguages.contains(newValue) {
-                    selectedLanguages.removeAll { $0 == newValue }
-                } else {
-                    if let index = selectedLanguages.firstIndex(of: language) {
-                        selectedLanguages[index] = newValue
-                    }
-                }
-            }
-        )
-    }
-
-    func addLanguage(_ language: String) {
-        if !selectedLanguages.contains(language) {
-            selectedLanguages.append(language)
-        }
-    }
-
+// MARK: - UI Properties
+extension EditProfileView {
     private var AboutMeTextField: some View {
-        VStack(alignment: .trailing) {
+        let characterLimit = 200
+
+        return VStack(alignment: .trailing) {
             TextEditor(text: $viewModel.profile.details.aboutMe)
                 .onReceive(Just(viewModel.profile.details.aboutMe)) { _ in
                     limitText(characterLimit)
@@ -145,9 +80,12 @@ struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewMo
                 .foregroundColor(.gray)
                 .padding(.trailing, 5)
         }
-        .padding(.horizontal, 15)
+        .padding(10, 15, 0, 15)
     }
+}
 
+// MARK: - Methods
+extension EditProfileView {
     private func sectionTitle(title: String) -> some View {
         Text.localized(LocalizedStringKey(title))
             .secondaryTitleBold(.primaryColor)
@@ -296,7 +234,116 @@ extension EditProfileView {
     }
 }
 
-// MARK: - Photo
+// MARK: - LanguagesView
+extension EditProfileView {
+    struct LanguagesView: View {
+        @State private var selectedLanguages: [String] = []
+
+        let maxLanguages = 5
+
+        let languages: [String] = {
+            var seenNames = Set<String>()
+            return Locale.availableIdentifiers.compactMap { identifier in
+                let locale = Locale(identifier: identifier)
+                guard let languageCode = Locale(identifier: identifier).language.languageCode?.identifier,
+                      let languageName = locale.localizedString(forLanguageCode: languageCode),
+                      !seenNames.contains(languageName) else { return nil }
+                seenNames.insert(languageName)
+                return languageName.capitalized
+            }
+            .sorted { $0 < $1 }
+        }()
+
+        var PlusButtonMenu: some View {
+            Menu {
+                ForEach(languages, id: \.self) { language in
+                    Button(language) {
+                        addLanguage(language)
+                    }
+                }
+            } label: {
+                Image.assetSFSymbol(.plusCircleFill, color: .gray, font: .largeTitle)
+            }
+        }
+
+        var body: some View {
+            LazyVStack(alignment: .leading) {
+                let grids = makeGrids(with: selectedLanguages, availableWidth: UIScreen.main.bounds.width - 80)
+                let totalGrids = grids.count
+
+                if totalGrids > 0 {
+                    ForEach(Array(grids.enumerated()), id: \.element.self) { gridIndex, languageDataArray in
+                        LazyHGrid(rows: [GridItem(.flexible())]) {
+                            ForEach(Array(languageDataArray.enumerated()), id: \.element) { rowIndex, language in
+                                Picker(Localizable.languages, selection: getLanguageBinding(for: language.language)) {
+                                    ForEach(languages, id: \.self) { pickerLanguage in
+                                        Text(pickerLanguage)
+                                    }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                .accentColor(.appWhite)
+                                .foregroundColor(.appWhite)
+                                .background(Color.appBlue)
+                                .cornerRadius(15)
+
+                                if gridIndex == totalGrids - 1 && rowIndex == languageDataArray.count - 1 && selectedLanguages.count < maxLanguages {
+                                    PlusButtonMenu
+                                }
+                            }
+                        }
+                    }
+                }
+                if selectedLanguages.isEmpty {
+                    PlusButtonMenu
+                        .padding(.top, -22)
+                }
+            }
+            .padding(15, 10, 0, 10)
+        }
+
+        func getLanguageBinding(for language: String) -> Binding<String> {
+            Binding(
+                get: {
+                    language
+                },
+                set: { newValue in
+                    if selectedLanguages.contains(newValue) {
+                        selectedLanguages.removeAll { $0 == newValue }
+                    } else {
+                        if let index = selectedLanguages.firstIndex(of: language) {
+                            selectedLanguages[index] = newValue
+                        }
+                    }
+                }
+            )
+        }
+
+        func addLanguage(_ language: String) {
+            if !selectedLanguages.contains(language) {
+                selectedLanguages.append(language)
+            }
+        }
+
+        func makeGrids(with languages: [String], availableWidth: CGFloat) -> [[LanguageData]] {
+            var grids: [[LanguageData]] = [[]]
+            var currentWidth: CGFloat = 0
+
+            for language in languages {
+                let languageWidth = language.widthOfString(usingFont: .systemFont(ofSize: 17)) + 40
+                if currentWidth + languageWidth > availableWidth {
+                    grids.append([LanguageData(language: language)])
+                    currentWidth = languageWidth
+                } else {
+                    grids[grids.count - 1].append(LanguageData(language: language))
+                    currentWidth += languageWidth
+                }
+            }
+            return grids
+        }
+    }
+}
+
+// MARK: - Photo Model
 extension EditProfileView {
     struct Photo: Identifiable, Equatable {
         let id: UUID
@@ -305,6 +352,16 @@ extension EditProfileView {
         init(image: Image, id: UUID = UUID()) {
             self.id = id
             self.image = image
+        }
+    }
+
+    struct LanguageData: Identifiable, Hashable {
+        let id: UUID
+        var language: String
+
+        init(language: String, id: UUID = UUID()) {
+            self.id = id
+            self.language = language
         }
     }
 }
