@@ -13,11 +13,18 @@ private typealias Localizable = Strings.EditProfile
 
 struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewModeling {
     @StateObject var viewModel: ViewModeling
+    @State private var isPresentingCityPicker = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading) {
                 PhotoGridView()
+                Button("Pick a City") {
+                    isPresentingCityPicker = true
+                }
+                .sheet(isPresented: $isPresentingCityPicker) {
+                    CityPickerView(isPresenting: $isPresentingCityPicker)
+                }
                 sectionTitle(title: Localizable.languages)
                 LanguagesView()
                 sectionTitle(title: Localizable.aboutMe)
@@ -343,7 +350,61 @@ extension EditProfileView {
     }
 }
 
-// MARK: - Photo Model
+import MapKit
+
+// MARK: - CityPickerView
+extension EditProfileView {
+    struct CityPickerView: View {
+        @ObservedObject var citySearchCompleter = CitySearchCompleter()
+        @State private var searchText = String()
+        @Binding var isPresenting: Bool
+
+        var body: some View {
+            NavigationView {
+                List(citySearchCompleter.suggestions, id: \.self) { suggestion in
+                    Text(suggestion.title).onTapGesture {
+                        print("City selected: \(suggestion.title)")
+                        self.isPresenting = false
+                    }
+                }
+                .navigationBarTitle(Text("Search City"), displayMode: .inline)
+                .searchable(text: $searchText)
+                .onChange(of: searchText) { newValue in
+                    citySearchCompleter.searchQuery(newValue)
+                }
+            }
+        }
+    }
+}
+
+class CitySearchCompleter: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
+    @Published var suggestions: [MKLocalSearchCompletion] = []
+
+    private var searchCompleter: MKLocalSearchCompleter
+
+    override init() {
+        self.searchCompleter = MKLocalSearchCompleter()
+        super.init()
+        self.searchCompleter.resultTypes = .address
+        self.searchCompleter.delegate = self
+    }
+
+    func searchQuery(_ query: String) {
+        searchCompleter.queryFragment = query
+    }
+
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        DispatchQueue.main.async {
+            self.suggestions = completer.results
+        }
+    }
+
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        print("Error: \(error.localizedDescription)")
+    }
+}
+
+// MARK: - Models
 extension EditProfileView {
     struct Photo: Identifiable, Equatable {
         let id: UUID
