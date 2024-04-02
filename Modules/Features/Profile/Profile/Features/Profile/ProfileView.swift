@@ -138,7 +138,7 @@ extension ProfileView {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
-        .frame(height: UIScreen.main.bounds.height / 1.5)
+        .frame(height: screenHeight / 1.5)
         .cornerRadius(20)
         .padding(0, 10, 0, 10)
         .overlay(alignment: .bottomLeading) {
@@ -275,7 +275,7 @@ extension ProfileView {
     func makeChips(chips: [ChipData]) -> some View {
         LazyVStack(alignment: .leading) {
             ForEach(
-                Chip.makeGrids(with: chips, availableWidth: UIScreen.main.bounds.width - 60),
+                Chip.makeGrids(with: chips, availableWidth: screenWidth - 60),
                 id: \.self
             ) { grid in
                 LazyHGrid(rows: [GridItem(.flexible())]) {

@@ -38,7 +38,7 @@ public struct FeedBackBottomSheet: View {
                 Image.assetImage(image)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: UIScreen.main.bounds.height / 7)
+                    .frame(height: screenHeight / 7)
             }
 
             if let title, title.isNotEmpty {

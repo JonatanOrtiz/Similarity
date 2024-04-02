@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreInterface
 
+// MARK: - Methods
 public extension View {
     func innerShadow<S: Shape, SS: ShapeStyle>(
         shape: S,
@@ -158,6 +159,26 @@ public extension View {
         }
     }
 
+    func customBottomSheet<Content: View>(
+        isPresented: Binding<Bool>,
+        background: Color? = nil,
+        height: CGFloat? = nil,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        self.sheet(isPresented: isPresented) {
+            CustomBottomSheet(customView: content(), background: background, height: height)
+        }
+    }
+
+    @ViewBuilder
+    func conditionalPresentationBackground(_ color: Color?) -> some View {
+        if let color = color {
+            self.presentationBackground(color)
+        } else {
+            self
+        }
+    }
+
     func padding(
         _ top: CGFloat,
         _ leading: CGFloat,
@@ -182,5 +203,16 @@ public extension View {
 
     func haptics(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
         UIImpactFeedbackGenerator(style: style).impactOccurred()
+    }
+}
+
+// MARK: - Properties
+public extension View {
+    var screenWidth: CGFloat {
+        UIScreen.main.bounds.width
+    }
+
+    var screenHeight: CGFloat {
+        UIScreen.main.bounds.height
     }
 }

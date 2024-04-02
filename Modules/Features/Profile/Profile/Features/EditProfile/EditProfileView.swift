@@ -14,17 +14,14 @@ private typealias Localizable = Strings.EditProfile
 struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewModeling {
     @StateObject var viewModel: ViewModeling
     @State private var isPresentingCityPicker = false
+    @State private var selectedCity: String?
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading) {
                 PhotoGridView()
-                Button("Pick a City") {
-                    isPresentingCityPicker = true
-                }
-                .sheet(isPresented: $isPresentingCityPicker) {
-                    CityPickerView(isPresenting: $isPresentingCityPicker)
-                }
+                sectionTitle(title: Localizable.city)
+                CityView
                 sectionTitle(title: Localizable.languages)
                 LanguagesView()
                 sectionTitle(title: Localizable.aboutMe)
@@ -33,18 +30,42 @@ struct EditProfileView<ViewModeling>: View where ViewModeling: EditProfileViewMo
                 CustomTextField(
                     text: binding(for: $viewModel.profile.details.job),
                     placeholder: Localizable.jobTextField,
-                    backgroundColor: .white.opacity(0.2)
+                    backgroundColor: .secondaryPurple
                 )
                 .padding(10, 15, 0, 15)
                 CustomTextField(
                     text: binding(for: $viewModel.profile.details.graduation),
                     placeholder: Localizable.graduationTextField,
-                    backgroundColor: .white.opacity(0.2)
+                    backgroundColor: .secondaryPurple
                 )
                 .padding(10, 15, 0, 15)
             }
         }
         .backgroundImage()
+    }
+
+    var CityView: some View {
+        Text(selectedCity ?? viewModel.profile.details.city)
+            .foregroundColor(.primaryColor)
+            .onTapGesture {
+                isPresentingCityPicker = true
+            }
+            .customBottomSheet(isPresented: $isPresentingCityPicker, height: screenHeight / 2) {
+                CityPickerView(isPresenting: $isPresentingCityPicker, selectedCity: $selectedCity)
+            }
+            .frame(
+                width: min((selectedCity ?? viewModel.profile.details.city).widthOfString(usingFont: .systemFont(ofSize: 17)),
+                screenWidth - 60),
+                height: 40
+            )
+            .padding(5, 15, 5, 15)
+            .background(Color.secondaryPurple)
+            .cornerRadius(15)
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(Color.primaryColor, lineWidth: 1)
+            )
+            .padding(10, 15, -5, 15)
     }
 }
 
@@ -61,7 +82,7 @@ extension EditProfileView {
                 .disableAutocorrection(true)
                 .padding(10)
                 .scrollContentBackground(.hidden)
-                .background(.white.opacity(0.2))
+                .background(Color.secondaryPurple)
                 .frame(height: 200)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .overlay(
@@ -275,7 +296,7 @@ extension EditProfileView {
 
         var body: some View {
             LazyVStack(alignment: .leading) {
-                let grids = makeGrids(with: selectedLanguages, availableWidth: UIScreen.main.bounds.width - 80)
+                let grids = makeGrids(with: selectedLanguages, availableWidth: screenWidth - 80)
                 let totalGrids = grids.count
 
                 if totalGrids > 0 {
@@ -358,16 +379,17 @@ extension EditProfileView {
         @ObservedObject var citySearchCompleter = CitySearchCompleter()
         @State private var searchText = String()
         @Binding var isPresenting: Bool
+        @Binding var selectedCity: String?
 
         var body: some View {
             NavigationView {
                 List(citySearchCompleter.suggestions, id: \.self) { suggestion in
                     Text(suggestion.title).onTapGesture {
-                        print("City selected: \(suggestion.title)")
+                        self.selectedCity = suggestion.title
                         self.isPresenting = false
                     }
                 }
-                .navigationBarTitle(Text("Search City"), displayMode: .inline)
+                .navigationBarTitle(Text(Localizable.citySearch), displayMode: .inline)
                 .searchable(text: $searchText)
                 .onChange(of: searchText) { newValue in
                     citySearchCompleter.searchQuery(newValue)
