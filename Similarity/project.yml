@@ -47,6 +47,17 @@ targets:
       - path: ${SWIFTLINT_SH_PATH}
         name: SwiftLint
         basedOnDependencyAnalysis: false
+  SimilarityTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      SWIFT_VERSION: ${IOS_TESTS_SWIFT_VERSION}
+      IPHONEOS_DEPLOYMENT_TARGET: ${IOS_TESTS_DEPLOY_TARGET}
+    configFiles:
+      Debug: Configs/TestsDebug.xcconfig
+      Homolog: Configs/TestsHomolog.xcconfig
+      Release: Configs/TestsRelease.xcconfig
+    sources: [SimilarityTests]
 projectReferences:
   Core:
     path: ../Modules/Features/Core/Core.xcodeproj
@@ -58,3 +69,83 @@ projectReferences:
     path: ../Modules/Features/Profile/Profile.xcodeproj
   UI:
     path: ../Modules/Features/UI/UI.xcodeproj
+schemes:
+  Similarity - Dev:
+    build:
+      targets:
+        Similarity: all
+        SimilarityTests: [test]
+    run:
+      config: Debug
+    profile:
+      config: Debug
+    analyze:
+      config: Debug
+    archive:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - name: SimilarityTests
+          randomExecutionOrder: true
+  All Tests:
+    build:
+      targets:
+        Similarity: all
+        SimilarityTests: [test]
+    run:
+      config: Debug
+    profile:
+      config: Debug
+    analyze:
+      config: Debug
+    archive:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets: [Similarity, Home/Home]
+      targets:
+        - name: SimilarityTests
+          parallelizable: ${IOS_TESTS_PARALLELIZABLE}
+          randomExecutionOrder: true
+        - name: Home/HomeTests
+          parallelizable: ${IOS_TESTS_PARALLELIZABLE}
+          randomExecutionOrder: true
+  Similarity - Homolog:
+    build:
+      targets:
+        Similarity: all
+    run:
+      config: Homolog
+    profile:
+      config: Homolog
+    analyze:
+      config: Homolog
+    archive:
+      config: Homolog
+    test:
+      config: Homolog
+      gatherCoverageData: true
+      targets:
+        - name: SimilarityTests
+          randomExecutionOrder: true
+  Similarity - Prod:
+    build:
+      targets:
+        Similarity: all
+    run:
+      config: Release
+    profile:
+      config: Release
+    analyze:
+      config: Release
+    archive:
+      config: Release
+    test:
+      config: Release
+      gatherCoverageData: true
+      targets:
+        - name: SimilarityTests
+          randomExecutionOrder: true
