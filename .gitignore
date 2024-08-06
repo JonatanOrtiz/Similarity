@@ -102,3 +102,17 @@ xcschememanagement.plist
 GoogleService-Info.plist
 GoogleService-Info-Dev.plist
 
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+
+# Match
+
+# Arquivos sensíveis que não devem ser versionados
+*.keystore
+*.p12
+*.mobileprovision
+.secret
+.env
+

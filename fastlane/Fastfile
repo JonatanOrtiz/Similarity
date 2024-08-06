@@ -2,22 +2,41 @@
 # You can find the documentation at https://docs.fastlane.tools
 #
 # For a list of all available actions, check out
-#
 #     https://docs.fastlane.tools/actions
 #
 # For a list of all available plugins, check out
-#
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
-
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
 default_platform(:ios)
 
 platform :ios do
-  desc "Description of what the lane does"
-  lane :custom_lane do
-    # add actions here: https://docs.fastlane.tools/actions
+  desc "Build the iOS application"
+  lane :build do
+    # Build the app using the Gym tool
+    gym(
+      scheme: "Similarity", # Specify your project's scheme
+      clean: true,          # Clean the build folder before building
+      export_method: 'development' # Set export method to 'development'
+    )
+  end
+
+  desc "Run tests for the iOS application"
+  lane :test do
+    # Run tests using the Scan tool
+    scan(
+      scheme: "SimilarityTests", # Specify your test scheme
+      clean: true,               # Clean the build folder before testing
+      code_coverage: true,       # Generate code coverage reports
+      device: "iPhone 13"        # Specify the name of the simulator for testing
+    )
+  end
+
+  desc "Custom lane to perform both build and test"
+  lane :build_and_test do
+    build
+    test
   end
 end
