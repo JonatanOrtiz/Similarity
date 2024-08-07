@@ -5,7 +5,8 @@ platform :ios do
   lane :build do
     gym(
       scheme: "Similarity - Dev", # Certifique-se de que este é o nome do scheme correto
-      clean: true
+      clean: true,
+      export_method: "development"
     )
   end
 

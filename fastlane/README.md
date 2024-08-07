@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios build
 ```
 
-Build the iOS application
+Build the iOS app
 
 ### ios test
 
@@ -29,7 +29,7 @@ Build the iOS application
 [bundle exec] fastlane ios test
 ```
 
-Run tests for the iOS application
+Run tests for the iOS app
 
 ### ios build_and_test
 
@@ -37,7 +37,15 @@ Run tests for the iOS application
 [bundle exec] fastlane ios build_and_test
 ```
 
-Custom lane to perform both build and test
+Build and run tests for the iOS app
+
+### ios send_failure_notification
+
+```sh
+[bundle exec] fastlane ios send_failure_notification
+```
+
+Send failure notification
 
 ----
 
