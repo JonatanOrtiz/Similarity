@@ -15,13 +15,29 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios sync_certificates
+### ios build
 
 ```sh
-[bundle exec] fastlane ios sync_certificates
+[bundle exec] fastlane ios build
 ```
 
-Sync certificates and provisioning profiles across your team
+Build the iOS application
+
+### ios test
+
+```sh
+[bundle exec] fastlane ios test
+```
+
+Run tests for the iOS application
+
+### ios build_and_test
+
+```sh
+[bundle exec] fastlane ios build_and_test
+```
+
+Custom lane to perform both build and test
 
 ----
 
