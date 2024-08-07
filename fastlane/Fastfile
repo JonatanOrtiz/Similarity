@@ -6,12 +6,7 @@ platform :ios do
     gym(
       scheme: "Similarity - Dev", # Certifique-se de que este é o nome do scheme correto
       clean: true,
-      export_method: "development",
-      export_options: {
-        provisioningProfiles: {
-          "com.jonatanortiz.Similarity-Development" => "match Development com.jonatanortiz.Similarity-Development"
-        }
-      }
+      export_method: "development"
     )
   end
 
