@@ -1,37 +1,14 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Build the iOS app"
-  lane :build do
-    gym(
-      scheme: "Similarity - Dev", # Certifique-se de que este é o nome do scheme correto
-      clean: true,
-      export_method: "development",
-      disable_xcpretty: true, # Desativa o xcpretty para obter mais logs detalhados
-      include_bitcode: false, # Se não estiver usando bitcode, pode desativar
-      output_directory: "./build", # Diretório de saída
-      skip_profile_detection: true, # Ignora detecção de perfis
-      skip_package_dependencies_resolution: true, # Ignora resolução de dependências do SPM
-      xcargs: "-allowProvisioningUpdates" # Permite atualizações de provisionamento
-    )
-  end
-
-  desc "Run tests for the iOS app"
+  desc "Run tests on simulator"
   lane :test do
     scan(
-      scheme: "Similarity - Dev", # Certifique-se de que este é o nome do scheme correto
-      clean: true
+      scheme: "Similarity",
+      devices: ["iPhone 8"], # Altere para o simulador desejado
+      clean: true,
+      workspace: "Similarity.xcworkspace",
+      destination: "platform=iOS Simulator,name=iPhone 8,OS=latest"
     )
-  end
-
-  desc "Build and run tests for the iOS app"
-  lane :build_and_test do
-    build
-    test
-  end
-
-  desc "Send failure notification"
-  lane :send_failure_notification do
-    # Adicione aqui sua lógica de notificação de falha
   end
 end
