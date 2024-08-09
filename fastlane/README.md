@@ -15,6 +15,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios build
+
+```sh
+[bundle exec] fastlane ios build
+```
+
+Build the app
+
 ### ios test
 
 ```sh
@@ -22,6 +30,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 ```
 
 Run tests on simulator
+
+### ios send_failure_notification
+
+```sh
+[bundle exec] fastlane ios send_failure_notification
+```
+
+Send failure notification
 
 ----
 

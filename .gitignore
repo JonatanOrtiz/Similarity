@@ -23,6 +23,9 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 
+# Ignore the output directory
+output/
+
 ## Obj-C/Swift specific
 *.hmap
 

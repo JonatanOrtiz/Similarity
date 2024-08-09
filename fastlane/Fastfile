@@ -1,14 +1,39 @@
 default_platform(:ios)
 
 platform :ios do
+  desc "Build the app"
+  lane :build do
+    gym(
+      scheme: "Similarity - Dev",
+      workspace: "Similarity.xcworkspace",
+      clean: true,
+      derived_data_path: "build",
+      export_method: "development",
+      output_directory: "./output",
+      output_name: "Similarity.ipa",
+      silent: false,
+      skip_codesigning: true,
+      skip_profile_detection: true,
+      disable_package_automatic_updates: true,
+      skip_package_ipa: true,
+      skip_package_pkg: true,
+      xcodebuild_command: "xcodebuild"
+    )
+  end
+
   desc "Run tests on simulator"
   lane :test do
     scan(
       scheme: "All Tests",
-      devices: ["iPhone 15 Pro"], # Altere para o simulador desejado
+      devices: ["iPhone 15 Pro"],
       clean: true,
       workspace: "Similarity.xcworkspace",
       destination: "platform=iOS Simulator,name=iPhone 15 Pro,OS=latest"
     )
+  end
+
+  desc "Send failure notification"
+  lane :send_failure_notification do
+    UI.message("Build or Test Failed!")
   end
 end
