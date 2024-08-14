@@ -3,10 +3,7 @@ pipeline {
     stages {
         stage('Preparation') {
             when {
-                anyOf {
-                    branch 'main'
-                    changeRequest()
-                }
+                changeRequest()
             }
             steps {
                 dir("$env.PROJECT_PATH") {
@@ -16,10 +13,7 @@ pipeline {
         }
         stage('Generate Project') {
             when {
-                anyOf {
-                    branch 'main'
-                    changeRequest()
-                }
+                changeRequest()
             }
             steps {
                 dir("$env.PROJECT_PATH") {
@@ -29,10 +23,7 @@ pipeline {
         }
         stage('Build') {
             when {
-                anyOf {
-                    branch 'main'
-                    changeRequest()
-                }
+                changeRequest()
             }
             steps {
                 dir("$env.PROJECT_PATH") {
@@ -42,10 +33,7 @@ pipeline {
         }
         stage('Test') {
             when {
-                anyOf {
-                    branch 'main'
-                    changeRequest()
-                }
+                changeRequest()
             }
             steps {
                 dir("$env.PROJECT_PATH") {
@@ -55,10 +43,7 @@ pipeline {
         }
         stage('Cleanup') {
             when {
-                anyOf {
-                    branch 'main'
-                    changeRequest()
-                }
+                changeRequest()
             }
             steps {
                 echo 'Cleaning up after build'
@@ -78,7 +63,7 @@ pipeline {
         failure {
             echo 'Build or Test Failed!'
             dir("$env.PROJECT_PATH") {
-                sh 'bundle exec Fastlane send_failure_notification'
+                sh 'bundle exec fastlane send_failure_notification'
             }
         }
     }
