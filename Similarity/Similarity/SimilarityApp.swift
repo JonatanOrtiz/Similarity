@@ -10,6 +10,7 @@ import Home
 import Profile
 import CoreInterface
 
+// MARK: - SimilarityApp
 @main
 struct SimilarityApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
@@ -21,6 +22,7 @@ struct SimilarityApp: App {
     }
 }
 
+// MARK: - AppEntryPoint
 struct AppEntryPoint: View {
     @Inject var auth: Authenticating
     
