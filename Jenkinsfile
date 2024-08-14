@@ -2,6 +2,12 @@ pipeline {
     agent { label 'similarity' }
     stages {
         stage('Preparation') {
+            when {
+                anyOf {
+                    branch 'main'
+                    changeRequest()
+                }
+            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle install'
@@ -9,6 +15,12 @@ pipeline {
             }
         }
         stage('Generate Project') {
+            when {
+                anyOf {
+                    branch 'main'
+                    changeRequest()
+                }
+            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'make generate'
@@ -16,6 +28,12 @@ pipeline {
             }
         }
         stage('Build') {
+            when {
+                anyOf {
+                    branch 'main'
+                    changeRequest()
+                }
+            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle exec fastlane build'
@@ -23,6 +41,12 @@ pipeline {
             }
         }
         stage('Test') {
+            when {
+                anyOf {
+                    branch 'main'
+                    changeRequest()
+                }
+            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle exec fastlane test'
@@ -30,6 +54,12 @@ pipeline {
             }
         }
         stage('Cleanup') {
+            when {
+                anyOf {
+                    branch 'main'
+                    changeRequest()
+                }
+            }
             steps {
                 echo 'Cleaning up after build'
                 dir("$env.PROJECT_PATH") {
@@ -48,7 +78,7 @@ pipeline {
         failure {
             echo 'Build or Test Failed!'
             dir("$env.PROJECT_PATH") {
-                sh 'bundle exec fastlane send_failure_notification'
+                sh 'bundle exec Fastlane send_failure_notification'
             }
         }
     }
