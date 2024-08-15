@@ -1,7 +1,8 @@
 pipeline {
     agent { label 'similarity' }
     options {
-        disableConcurrentBuilds()
+        timeout(time: 8, unit: 'HOURS')
+        disableConcurrentBuilds(abortPrevious: true)
     }
     stages {
         stage('Preparation') {
@@ -65,6 +66,9 @@ pipeline {
             dir("$env.PROJECT_PATH") {
                 sh 'bundle exec fastlane send_failure_notification'
             }
+        }
+	always {
+            cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true, deleteDirs: true)
         }
     }
 }
