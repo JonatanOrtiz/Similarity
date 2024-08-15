@@ -39,25 +39,14 @@ pipeline {
         }
     }
     post {
-        always {
-            echo 'This will always run regardless of the result'
-        }
         success {
             echo 'Build and Test Succeeded!'
-            step([$class: 'GitHubCommitStatusSetter', 
-                reposSource: [$class: 'ManuallyEnteredRepositorySource', url: 'https://github.com/JonatanOrtiz/Similarity'],
-                contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'CI'],
-                statusResultSource: [$class: 'AnyBuildResultSource', results: [[buildState: 'SUCCESS', state: 'SUCCESS']]]])
         }
         failure {
             echo 'Build or Test Failed!'
             dir("$env.PROJECT_PATH") {
                 sh 'bundle exec fastlane send_failure_notification'
             }
-            step([$class: 'GitHubCommitStatusSetter', 
-                reposSource: [$class: 'ManuallyEnteredRepositorySource', url: 'https://github.com/JonatanOrtiz/Similarity'],
-                contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'CI'],
-                statusResultSource: [$class: 'AnyBuildResultSource', results: [[buildState: 'FAILURE', state: 'FAILURE']]]])
         }
     }
 }
