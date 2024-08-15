@@ -22,7 +22,6 @@ struct SimilarityApp: App {
     }
 }
 
-// MARK: - AppEntryPoint
 struct AppEntryPoint: View {
     @Inject var auth: Authenticating
     
