@@ -39,9 +39,6 @@ pipeline {
         }
     }
     post {
-        always {
-            echo 'This will always run regardless of the result'
-        }
         success {
             echo 'Build and Test Succeeded!'
         }
