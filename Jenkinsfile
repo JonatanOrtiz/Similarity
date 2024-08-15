@@ -2,6 +2,9 @@ pipeline {
     agent { label 'similarity' }
     stages {
         stage('Preparation') {
+            when {
+                changeRequest()
+            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle install'
@@ -9,6 +12,9 @@ pipeline {
             }
         }
         stage('Generate Project') {
+            when {
+                changeRequest()
+            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'make generate'
@@ -16,6 +22,9 @@ pipeline {
             }
         }
         stage('Build') {
+            when {
+                changeRequest()
+            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle exec fastlane build'
@@ -23,6 +32,9 @@ pipeline {
             }
         }
         stage('Test') {
+            when {
+                changeRequest()
+            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle exec fastlane test'
@@ -30,6 +42,9 @@ pipeline {
             }
         }
         stage('Cleanup') {
+            when {
+                changeRequest()
+            }
             steps {
                 echo 'Cleaning up after build'
                 dir("$env.PROJECT_PATH") {
@@ -39,9 +54,6 @@ pipeline {
         }
     }
     post {
-        always {
-            echo 'This will always run regardless of the result'
-        }
         success {
             echo 'Build and Test Succeeded!'
         }
