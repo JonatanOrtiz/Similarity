@@ -10,6 +10,7 @@ import Home
 import Profile
 import CoreInterface
 
+// MARK: - SimilarityApp
 @main
 struct SimilarityApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
