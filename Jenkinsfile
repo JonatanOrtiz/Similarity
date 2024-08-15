@@ -3,7 +3,9 @@ pipeline {
     stages {
         stage('Preparation') {
             when {
-                changeRequest()
+                anyOf {
+                    changeRequest()
+                }
             }
             steps {
                 dir("$env.PROJECT_PATH") {
@@ -13,7 +15,9 @@ pipeline {
         }
         stage('Generate Project') {
             when {
-                changeRequest()
+                anyOf {
+                    changeRequest()
+                }
             }
             steps {
                 dir("$env.PROJECT_PATH") {
@@ -23,7 +27,9 @@ pipeline {
         }
         stage('Build') {
             when {
-                changeRequest()
+                anyOf {
+                    changeRequest()
+                }
             }
             steps {
                 dir("$env.PROJECT_PATH") {
@@ -33,7 +39,9 @@ pipeline {
         }
         stage('Test') {
             when {
-                changeRequest()
+                anyOf {
+                    changeRequest()
+                }
             }
             steps {
                 dir("$env.PROJECT_PATH") {
@@ -43,7 +51,9 @@ pipeline {
         }
         stage('Cleanup') {
             when {
-                changeRequest()
+                anyOf {
+                    changeRequest()
+                }
             }
             steps {
                 echo 'Cleaning up after build'
@@ -54,16 +64,20 @@ pipeline {
         }
     }
     post {
-        always {
-            echo 'This will always run regardless of the result'
-        }
         success {
-            echo 'Build and Test Succeeded!'
+            script {
+                def description = "Build Succeeded"
+                def status = "SUCCESS"
+                def context = "ci/jenkins"
+                githubNotify context: context, status: status, description: description
+            }
         }
         failure {
-            echo 'Build or Test Failed!'
-            dir("$env.PROJECT_PATH") {
-                sh 'bundle exec fastlane send_failure_notification'
+            script {
+                def description = "Build Failed"
+                def status = "FAILURE"
+                def context = "ci/jenkins"
+                githubNotify context: context, status: status, description: description
             }
         }
     }
