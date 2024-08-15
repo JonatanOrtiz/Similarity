@@ -1,5 +1,11 @@
 pipeline {
     agent { label 'similarity' }
+
+    triggers {
+        githubPush()
+        changeRequest()
+    }
+
     stages {
         stage('Preparation') {
             steps {
