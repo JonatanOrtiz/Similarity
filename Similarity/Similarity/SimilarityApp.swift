@@ -10,7 +10,6 @@ import Home
 import Profile
 import CoreInterface
 
-// MARK: - AppEntryPoint
 @main
 struct SimilarityApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
