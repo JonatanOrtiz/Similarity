@@ -2,11 +2,6 @@ pipeline {
     agent { label 'similarity' }
     stages {
         stage('Preparation') {
-            when {
-                anyOf {
-                    changeRequest()
-                }
-            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle install'
@@ -14,11 +9,6 @@ pipeline {
             }
         }
         stage('Generate Project') {
-            when {
-                anyOf {
-                    changeRequest()
-                }
-            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'make generate'
@@ -26,11 +16,6 @@ pipeline {
             }
         }
         stage('Build') {
-            when {
-                anyOf {
-                    changeRequest()
-                }
-            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle exec fastlane build'
@@ -38,11 +23,6 @@ pipeline {
             }
         }
         stage('Test') {
-            when {
-                anyOf {
-                    changeRequest()
-                }
-            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle exec fastlane test'
@@ -50,11 +30,6 @@ pipeline {
             }
         }
         stage('Cleanup') {
-            when {
-                anyOf {
-                    changeRequest()
-                }
-            }
             steps {
                 echo 'Cleaning up after build'
                 dir("$env.PROJECT_PATH") {
@@ -64,21 +39,25 @@ pipeline {
         }
     }
     post {
+        always {
+            echo 'This will always run regardless of the result'
+        }
         success {
-            script {
-                def description = "Build Succeeded"
-                def status = "SUCCESS"
-                def context = "ci/jenkins"
-                githubNotify context: context, status: status, description: description
-            }
+            echo 'Build and Test Succeeded!'
+            step([$class: 'GitHubCommitStatusSetter', 
+                reposSource: [$class: 'ManuallyEnteredRepositorySource', url: 'https://github.com/JonatanOrtiz/Similarity'],
+                contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'CI'],
+                statusResultSource: [$class: 'AnyBuildResultSource', results: [[buildState: 'SUCCESS', state: 'SUCCESS']]]])
         }
         failure {
-            script {
-                def description = "Build Failed"
-                def status = "FAILURE"
-                def context = "ci/jenkins"
-                githubNotify context: context, status: status, description: description
+            echo 'Build or Test Failed!'
+            dir("$env.PROJECT_PATH") {
+                sh 'bundle exec fastlane send_failure_notification'
             }
+            step([$class: 'GitHubCommitStatusSetter', 
+                reposSource: [$class: 'ManuallyEnteredRepositorySource', url: 'https://github.com/JonatanOrtiz/Similarity'],
+                contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'CI'],
+                statusResultSource: [$class: 'AnyBuildResultSource', results: [[buildState: 'FAILURE', state: 'FAILURE']]]])
         }
     }
 }
