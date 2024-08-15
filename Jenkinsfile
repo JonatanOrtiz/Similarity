@@ -1,5 +1,8 @@
 pipeline {
     agent { label 'similarity' }
+    options {
+        disableConcurrentBuilds()
+    }
     stages {
         stage('Preparation') {
             when {
