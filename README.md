@@ -23,7 +23,7 @@
 - **🔧 Makefile**: Automating routine tasks for build, run, and management processes.
 - **👨‍💻 SwiftGen & SwiftLint**: Enhancing code quality and maintainability with automatic code generation and linting.
 - **🤖 iOS Automation**: Implementing automated processes for testing, building, and deployment.
-- **🔄 CI/CD with Jenkins & Fastlane**: Setting up and managing continuous integration and delivery pipelines to automate the build and release process.
+- **🔄 CI/CD with Jenkins, Fastlane & Github App**: Setting up and managing continuous integration and delivery pipelines to automate the build and release process.
 
 ## Getting Started 🚀
 
