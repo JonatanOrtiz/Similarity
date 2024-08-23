@@ -39,6 +39,14 @@ Run tests on simulator
 
 Send failure notification
 
+### ios release
+
+```sh
+[bundle exec] fastlane ios release
+```
+
+Assina e envia o app para a App Store
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

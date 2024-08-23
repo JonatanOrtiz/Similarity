@@ -15,7 +15,7 @@ pipeline {
         stage('Upload to App Store') {
             steps {
                 dir("$env.PROJECT_PATH") {
-                    sh 'bundle exec fastlane upload_to_appstore'
+                    sh 'bundle exec fastlane release'
                 }
             }
         }
