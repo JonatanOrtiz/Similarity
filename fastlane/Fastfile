@@ -36,4 +36,21 @@ platform :ios do
   lane :send_failure_notification do
     UI.message("Build or Test Failed!")
   end
+
+  desc "Assina e envia o app para a App Store"
+  lane :release do
+    match(type: "appstore", readonly: false)
+
+    gym(
+      scheme: "Similarity - Dev",
+      workspace: "Similarity.xcworkspace",
+      clean: true,
+      export_method: "app-store",
+      output_directory: "./output",
+      output_name: "Similarity.ipa",
+      silent: false
+    )
+
+    upload_to_app_store
+  end
 end

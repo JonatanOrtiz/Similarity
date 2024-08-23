@@ -5,69 +5,32 @@ pipeline {
         disableConcurrentBuilds(abortPrevious: true)
     }
     stages {
-        stage('Preparation') {
-            when {
-                changeRequest()
-            }
+        stage('Certificados e Perfis') {
             steps {
                 dir("$env.PROJECT_PATH") {
-                    sh 'bundle install'
+                    sh 'bundle exec fastlane match appstore'
                 }
             }
         }
-        stage('Generate Project') {
-            when {
-                changeRequest()
-            }
+        stage('Upload to App Store') {
             steps {
                 dir("$env.PROJECT_PATH") {
-                    sh 'make generate'
-                }
-            }
-        }
-        stage('Build') {
-            when {
-                changeRequest()
-            }
-            steps {
-                dir("$env.PROJECT_PATH") {
-                    sh 'bundle exec fastlane build'
-                }
-            }
-        }
-        stage('Test') {
-            when {
-                changeRequest()
-            }
-            steps {
-                dir("$env.PROJECT_PATH") {
-                    sh 'bundle exec fastlane test'
-                }
-            }
-        }
-        stage('Cleanup') {
-            when {
-                changeRequest()
-            }
-            steps {
-                echo 'Cleaning up after build'
-                dir("$env.PROJECT_PATH") {
-                    sh 'rm -rf build/'
+                    sh 'bundle exec fastlane upload_to_appstore'
                 }
             }
         }
     }
     post {
         success {
-            echo 'Build and Test Succeeded!'
+            echo 'Upload to App Store Succeeded!'
         }
         failure {
-            echo 'Build or Test Failed!'
+            echo 'Upload to App Store Failed!'
             dir("$env.PROJECT_PATH") {
                 sh 'bundle exec fastlane send_failure_notification'
             }
         }
-	always {
+        always {
             cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true, deleteDirs: true)
         }
     }
