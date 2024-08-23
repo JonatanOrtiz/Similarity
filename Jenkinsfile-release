@@ -1,14 +1,11 @@
 pipeline {
-    agent { label 'test' }
+    agent { label 'similarity' }
     options {
         timeout(time: 8, unit: 'HOURS')
         disableConcurrentBuilds(abortPrevious: true)
     }
     stages {
         stage('Preparation') {
-            when {
-                changeRequest()
-            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle install'
@@ -16,9 +13,6 @@ pipeline {
             }
         }
         stage('Generate Project') {
-            when {
-                changeRequest()
-            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'make generate'
@@ -26,9 +20,6 @@ pipeline {
             }
         }
         stage('Build') {
-            when {
-                changeRequest()
-            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle exec fastlane build'
@@ -36,33 +27,33 @@ pipeline {
             }
         }
         stage('Test') {
-            when {
-                changeRequest()
-            }
             steps {
                 dir("$env.PROJECT_PATH") {
                     sh 'bundle exec fastlane test'
                 }
             }
         }
-        stage('Cleanup') {
-            when {
-                changeRequest()
-            }
+        stage('Certificados e Perfis') {
             steps {
-                echo 'Cleaning up after build'
                 dir("$env.PROJECT_PATH") {
-                    sh 'rm -rf build/'
+                    sh 'bundle exec fastlane match appstore'
+                }
+            }
+        }
+        stage('Upload to App Store') {
+            steps {
+                dir("$env.PROJECT_PATH") {
+                    sh 'bundle exec fastlane release'
                 }
             }
         }
     }
     post {
         success {
-            echo 'Build and Test Succeeded!'
+            echo 'Release Succeeded!'
         }
         failure {
-            echo 'Build or Test Failed!'
+            echo 'Release Failed!'
             dir("$env.PROJECT_PATH") {
                 sh 'bundle exec fastlane send_failure_notification'
             }
