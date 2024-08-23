@@ -10,6 +10,10 @@ xcuserdata/
 *.xcscmblueprint
 *.xccheckout
 
+# Chave API do App Store Connect
+*.p8
+*.json
+
 ## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
 DerivedData/
