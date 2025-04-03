@@ -7,6 +7,7 @@
 
 import Combine
 import CoreInterface
+import SwiftUI
 
 public protocol SignInViewModeling: ObservableObject {
     typealias Action = () -> Void
@@ -15,8 +16,9 @@ public protocol SignInViewModeling: ObservableObject {
     var error: CustomError? { get set }
     var tryAgainAction: Action? { get set }
 
-    func signIn(email: String, password: String)
-    func signInWithGoogle()
+    @MainActor func signIn(email: String, password: String)
+    @MainActor func signInWithGoogle()
+    @MainActor func navigateToRegister()
 }
 
 final class SignInViewModel {
@@ -28,6 +30,7 @@ final class SignInViewModel {
 
     private var cancellables = Set<AnyCancellable>()
     private let dependencies: Dependencies
+    weak var coordinator: AuthCoordinating?
     
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
@@ -35,6 +38,7 @@ final class SignInViewModel {
 }
 
 extension SignInViewModel: SignInViewModeling {
+    @MainActor
     func signIn(email: String, password: String) {
         log(.buttonClicked(.signIn))
         dependencies.auth.signIn(email: email, password: password)
@@ -44,17 +48,19 @@ extension SignInViewModel: SignInViewModeling {
                     if case let .failure(error) = completion {
                         self?.error = CustomError(title: Strings.Common.genericErrorTitle, message: error.localizedDescription, image: "error")
                         self?.tryAgainAction = { [weak self] in
-                            _ = self?.signIn(email: email, password: password)
+                            self?.signIn(email: email, password: password)
                         }
                     }
                 },
                 receiveValue: { [weak self] user in
                     self?.user = user
+                    self?.coordinator?.didFinishAuth()
                 }
             )
             .store(in: &cancellables)
     }
     
+    @MainActor
     func signInWithGoogle() {
         log(.buttonClicked(.signInWithGoogle))
         dependencies.auth.signInWithGoogle()
@@ -66,33 +72,23 @@ extension SignInViewModel: SignInViewModeling {
                             self?.error = customError
                         }
                         self?.tryAgainAction = { [weak self] in
-                            _ = self?.signInWithGoogle()
+                            self?.signInWithGoogle()
                         }
                     }
                 },
                 receiveValue: { [weak self] user in
                     self?.user = user
+                    self?.coordinator?.didFinishAuth()
                 }
             )
             .store(in: &cancellables)
     }
     
-//    func signOut() {
-//        dependencies.auth.signOut()
-//            .receive(on: DispatchQueue.main)
-//            .sink(
-//                receiveCompletion: { [weak self] completion in
-//                    switch completion {
-//                    case .finished:
-//                        break
-//                    case let .failure(error):
-//                        self?.errorMessage = error.localizedDescription
-//                    }
-//                },
-//                receiveValue: { _ in }
-//            )
-//            .store(in: &cancellables)
-//    }
+    @MainActor
+    func navigateToRegister() {
+        log(.buttonClicked(.register))
+        coordinator?.showRegister()
+    }
 }
 
 extension SignInViewModel {

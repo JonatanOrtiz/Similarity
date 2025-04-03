@@ -29,7 +29,8 @@ struct AppEntryPoint: View {
         if auth.user != nil {
             EditProfileFactory.make(profile: AppProfile.fixture())
         } else {
-            SignInFactory.make()
+//            AuthCoordinatorFactory.make()
+            NavigationHubView()
         }
     }
 }

@@ -8,11 +8,12 @@
 import SwiftUI
 
 public enum RegisterFactory {
-    public static func make() -> some View {
+    @MainActor
+    public static func make(coordinator: AuthCoordinating) -> some View {
         let dependencyContainer = DependencyContainer()
         let viewModel = RegisterViewModel(dependencies: dependencyContainer)
+        viewModel.coordinator = coordinator
         let contentView = RegisterView(viewModel: viewModel)
-
         return contentView
     }
 }
