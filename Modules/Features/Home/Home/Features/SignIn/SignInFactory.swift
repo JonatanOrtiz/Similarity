@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-public enum SignInFactory {
-    public static func make() -> some View {
+enum SignInFactory {
+    @MainActor
+    static func make(coordinator: AuthCoordinating) -> some View {
         let dependencyContainer = DependencyContainer()
         let viewModel = SignInViewModel(dependencies: dependencyContainer)
+        viewModel.coordinator = coordinator
         let contentView = SignInView(viewModel: viewModel)
-        
         return contentView
     }
 }

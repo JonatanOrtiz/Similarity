@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-public enum RegisterFactory {
-    public static func make() -> some View {
+enum RegisterFactory {
+    @MainActor
+    static func make(coordinator: AuthCoordinating) -> some View {
         let dependencyContainer = DependencyContainer()
         let viewModel = RegisterViewModel(dependencies: dependencyContainer)
+        viewModel.coordinator = coordinator
         let contentView = RegisterView(viewModel: viewModel)
-
         return contentView
     }
 }

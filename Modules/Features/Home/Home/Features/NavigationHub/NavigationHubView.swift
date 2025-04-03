@@ -9,49 +9,34 @@ import SwiftUI
 import UI
 import Profile
 
-public struct NavigationHubView: View {
-    public init() {
+struct NavigationHubView<ViewModeling>: View where ViewModeling: NavigationHubViewModeling {
+    @StateObject var viewModel: ViewModeling
+
+    init(viewModel: ViewModeling) {
+        _viewModel = StateObject(wrappedValue: viewModel)
         UITabBar.appearance().isHidden = true
     }
 
-    @State var currentTab: Tab = .profilesList
-
-    public var body: some View {
+    var body: some View {
         ZStack(alignment: .bottom) {
-            TabView(selection: $currentTab) {
-                Text("Screen1")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundImage()
-                    .tag(Tab.configurations)
-
-                Text("Screen2")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundImage()
-                    .tag(Tab.likes)
-
-                Text("Screen3")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundImage()
-                    .tag(Tab.profilesList)
-
-                Text("Screen4")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundImage()
-                    .tag(Tab.matches)
-
-                ProfileFactory.make()
-                    .tag(Tab.userProfile)
+            TabView(selection: $viewModel.currentTab) {
+                ForEach(Tab.allCases, id: \.rawValue) { tab in
+                    viewModel.viewFor(tab)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .backgroundImage()
+                        .tag(tab)
+                }
             }
             VStack {
                 HStack(spacing: 0) {
                     ForEach(Tab.allCases, id: \.rawValue) { tab in
                         Button {
                             withAnimation(.easeInOut) {
-                                currentTab = tab
+                                viewModel.currentTab = tab
                             }
                         } label: {
                             LinearGradient(
-                                colors: currentTab == tab ? tabColors(currentTab, tab) : [.white.opacity(0.8)],
+                                colors: viewModel.currentTab == tab ? tabColors(viewModel.currentTab, tab) : [.white.opacity(0.8)],
                                 startPoint: .bottomLeading,
                                 endPoint: .topTrailing
                             )
@@ -60,7 +45,7 @@ public struct NavigationHubView: View {
                                     .renderingMode(.template)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(height: currentTab == tab ? 28 : 20)
+                                    .frame(height: viewModel.currentTab == tab ? 28 : 20)
                                     .frame(maxWidth: .infinity)
                                     .foregroundColor(.white)
                                     .padding(.bottom, 15)
@@ -95,7 +80,7 @@ public struct NavigationHubView: View {
 
 #Preview {
     PreviewDependencyOrchestrator.start()
-    return NavigationHubView()
+    return NavigationHubView(viewModel: NavigationHubViewModel())
 }
 
 enum Tab: String, CaseIterable {

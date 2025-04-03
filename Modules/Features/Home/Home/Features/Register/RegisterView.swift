@@ -7,41 +7,53 @@
 
 import SwiftUI
 import UI
+import CoreInterface
 
-public struct RegisterView<ViewModeling>: View where ViewModeling: RegisterViewModeling {
+struct RegisterView<ViewModeling>: View where ViewModeling: RegisterViewModeling {
     @StateObject var viewModel: ViewModeling
     @State private var email = String()
     @State private var password = String()
 
-    public var body: some View {
-        NavigationView {
-            VStack(alignment: .center) {
-                Spacer()
-                LogoView
-                Spacer()
-                EmailTextField
-                    .padding(.bottom, 5)
-                PasswordTextField
-                    .padding(.bottom, 5)
-                SignUpButton
-                    .padding(.bottom, 5)
-                SignUpWithGoogleButton
-                    .padding(.bottom, 20)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .backgroundImage()
-            .errorBottomSheet(
-                customError: $viewModel.error,
-                primaryButton: .init(title: Strings.Common.ok) {
-                    viewModel.error = nil
-                },
-                secondaryButton: .init(title: Strings.Common.tryAgain) {
-                    viewModel.error = nil
-                    viewModel.tryAgainAction?()
+    var body: some View {
+        VStack(alignment: .center) {
+            HStack {
+                Button {
+                    viewModel.navigateBack()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.white)
+                        .padding()
                 }
-            )
+                Spacer()
+            }
+            .padding(.top, 5)
+            
+            Spacer()
+            LogoView
+            Spacer()
+            EmailTextField
+                .padding(.bottom, 5)
+            PasswordTextField
+                .padding(.bottom, 5)
+            SignUpButton
+                .padding(.bottom, 5)
+            SignUpWithGoogleButton
+                .padding(.bottom, 20)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .backgroundImage()
+        .errorBottomSheet(
+            customError: $viewModel.error,
+            primaryButton: .init(title: Strings.Common.ok) {
+                viewModel.error = nil
+            },
+            secondaryButton: .init(title: Strings.Common.tryAgain) {
+                viewModel.error = nil
+                viewModel.tryAgainAction?()
+            }
+        )
         .tint(.primaryColor)
+        .navigationBarHidden(true)
     }
 
     var LogoView: some View {

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UI
+import CoreInterface
 
 struct SignInView<ViewModeling>: View where ViewModeling: SignInViewModeling {
     @StateObject var viewModel: ViewModeling
@@ -14,35 +15,33 @@ struct SignInView<ViewModeling>: View where ViewModeling: SignInViewModeling {
     @State private var password = String()
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .center) {
-                Spacer()
-                LogoView
-                Spacer()
-                EmailTextField
-                    .padding(.bottom, 5)
-                PasswordTextField
-                    .padding(.bottom, 5)
-                SignInButton
-                    .padding(.bottom, 5)
-                SignInWithGoogleButton
-                    .padding(.bottom, 5)
-                RegisterButton
-                    .padding(.bottom, 20)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .backgroundImage()
-            .errorBottomSheet(
-                customError: $viewModel.error,
-                primaryButton: .init(title: Strings.Common.ok) {
-                    viewModel.error = nil
-                },
-                secondaryButton: .init(title: Strings.Common.tryAgain) {
-                    viewModel.error = nil
-                    viewModel.tryAgainAction?()
-                }
-            )
+        VStack(alignment: .center) {
+            Spacer()
+            LogoView
+            Spacer()
+            EmailTextField
+                .padding(.bottom, 5)
+            PasswordTextField
+                .padding(.bottom, 5)
+            SignInButton
+                .padding(.bottom, 5)
+            SignInWithGoogleButton
+                .padding(.bottom, 5)
+            RegisterButton
+                .padding(.bottom, 20)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .backgroundImage()
+        .errorBottomSheet(
+            customError: $viewModel.error,
+            primaryButton: .init(title: Strings.Common.ok) {
+                viewModel.error = nil
+            },
+            secondaryButton: .init(title: Strings.Common.tryAgain) {
+                viewModel.error = nil
+                viewModel.tryAgainAction?()
+            }
+        )
         .tint(.primaryColor)
     }
 
@@ -99,10 +98,13 @@ struct SignInView<ViewModeling>: View where ViewModeling: SignInViewModeling {
     }
 
     var RegisterButton: some View {
-        NavigationLink(destination: RegisterFactory.make()) {
+        Button {
+            viewModel.navigateToRegister()
+        } label: {
             Text(Strings.SignIn.registerButton)
                 .headlineBold(.white.opacity(0.85))
                 .frame(height: 50)
+                .frame(maxWidth: .infinity)
                 .cardStyle()
                 .padding(.horizontal, 10)
         }
