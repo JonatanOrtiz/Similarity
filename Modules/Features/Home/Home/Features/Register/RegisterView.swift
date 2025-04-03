@@ -9,12 +9,12 @@ import SwiftUI
 import UI
 import CoreInterface
 
-public struct RegisterView<ViewModeling>: View where ViewModeling: RegisterViewModeling {
+struct RegisterView<ViewModeling>: View where ViewModeling: RegisterViewModeling {
     @StateObject var viewModel: ViewModeling
     @State private var email = String()
     @State private var password = String()
 
-    public var body: some View {
+    var body: some View {
         VStack(alignment: .center) {
             HStack {
                 Button {

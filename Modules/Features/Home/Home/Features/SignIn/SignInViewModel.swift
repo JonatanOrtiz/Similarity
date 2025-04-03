@@ -9,7 +9,7 @@ import Combine
 import CoreInterface
 import SwiftUI
 
-public protocol SignInViewModeling: ObservableObject {
+protocol SignInViewModeling: ObservableObject {
     typealias Action = () -> Void
 
     var user: AppUser? { get }

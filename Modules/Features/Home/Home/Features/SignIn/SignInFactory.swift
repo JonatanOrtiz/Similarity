@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-public enum SignInFactory {
+enum SignInFactory {
     @MainActor
-    public static func make(coordinator: AuthCoordinating) -> some View {
+    static func make(coordinator: AuthCoordinating) -> some View {
         let dependencyContainer = DependencyContainer()
         let viewModel = SignInViewModel(dependencies: dependencyContainer)
         viewModel.coordinator = coordinator

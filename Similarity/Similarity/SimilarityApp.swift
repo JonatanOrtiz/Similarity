@@ -30,7 +30,7 @@ struct AppEntryPoint: View {
             EditProfileFactory.make(profile: AppProfile.fixture())
         } else {
 //            AuthCoordinatorFactory.make()
-            NavigationHubView()
+            NavigationHubCoordinatorFactory.make()
         }
     }
 }
